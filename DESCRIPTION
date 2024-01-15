@@ -9,3 +9,7 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/gcpoole/ENSC311
+BugReports: https://github.com/gcpoole/ENSC311/issues
+Suggests: 
+    learnr
