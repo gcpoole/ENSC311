@@ -4,7 +4,7 @@ output:
   learnr::tutorial:
     progressive: true
 runtime: shiny_prerendered
-description: "An R learing lab exploring the Palmer Penguines data set.  In this lab, you will build and demonstrate proficiency in working with data.frames and plotting with base R syntax."
+description: "An R learning lab exploring the Palmer Penguines data set.  In this lab, you will build and demonstrate proficiency in working with data.frames and plotting with base R syntax."
 ---
 
 <!-- 
@@ -93,7 +93,7 @@ quiz(
 
 ### Displaying the stucture of a data.frame
 
-One of the best ways to understand what's in a data set is to look the structure summary.  Go ahead and display the structure summary for `pengins`.
+One of the best ways to understand what's in a data set is to look the structure summary.  Go ahead and display the structure summary for `penguins`.
 
 ```{r str_penguins, exercise=TRUE, exercise.setup = "pre_penguin"}
 
@@ -111,11 +111,15 @@ grade_code()
 
 When you are first working with a data set, one of the most useful bits of information is to understand the characteristics of the data you are working with.  You can explore the data column by column.  For instance, here is the vector of the species of penguins in the data set.
 
-```{r}
+```{r, echo=TRUE}
 as.character(palmerpenguins::penguins$species)
 ```
 
-Wow!  Lots of duplicates!  Can you display a vector that eliminates all of the duplicates and just has one value for each species (a "unique vector").  Do the same for the `island` column and the `year` column.
+Wow!  Lots of duplicates!  Can you: 
+
+- display a vector that eliminates all of the duplicates and just has one value (a "unique vector") for each value in the `species` column?
+- do the same for the `island` column? 
+- and the `year` column?
  
 ```{r unique_values, exercise=TRUE, exercise.setup = "pre_penguin"}
 
@@ -179,9 +183,20 @@ All this talk about "combinations of species and island" may seem wonkish -- and
 
 If you think about it, the only columns we need in a table that can tells us "*Which islands have which species?*" are `species` and `island.`  If Gentoo penguins are on Dream Island, there should be a record (row) in the table that has "Dream" in the `island` column and "Gentoo" in the `species` column, right?  If the species isn't on Dream Island, the same record would not be in the table. 
 
-If that's still not clear, let's look at such a table. 
+If that's still not clear, let's look at an example of such a table. This isn't derived from the `penguins` data -- I just made this up as an example of what we are trying to generate from the data...
 
-The following code will generate random combinations of `species` and `island` by determining all possible combinations and then selecting a random subset of those combinations.  Play with the code to figure out how it works.  For instance, you might want to insert a line of code to display `all_combos` and then run the code.  Then delete the line that displays `all_combos` and insert a line that displays `n_combos`.  If you look at each intermediate value in the code, you should be able to see how it works!
+```{r}
+tibble::tibble(islands = c("Torgersen", "Biscoe", "Biscoe", "Dream", "Dream"), species = c("Gentoo", "Chinstrap", "Adelie", "Gentoo", "Adelie"))
+```
+
+Each row contains a "unique combination" of islands and species. 
+Therefore, if this table have been derived from the `penguins` data, we would conclude that Torgersen Island has one species (Gentoo), Biscoe Island has two species (Chinstrap and Adelie), and Dream Island has two species (Gentoo and Adelie).  
+
+We could also read it the other way, concluding Gentoo penguins inhabit Torgersen and Dream Islands, Adelie penguins are on Biscoe and Dream Islands, and Chinstraps are limited to Biscoe Island.
+
+Let's make a table like this, but using the actual data in the `penguins` data frame!
+
+<!-- The following code will generate random combinations of `species` and `island` by determining all possible combinations and then selecting a random subset of those combinations.  Play with the code to figure out how it works.  For instance, you might want to insert a line of code to display `all_combos` and then run the code.  Then delete the line that displays `all_combos` and insert a line that displays `n_combos`.  If you look at each intermediate value in the code, you should be able to see how it works!
 
 Once you are done playing, click "start over" and run all the code a few times. The point is see different examples of possible answers to the question "*Which islands have which species?*" so you have an idea of what an answer to that question would look like. 
 
@@ -204,20 +219,22 @@ selected_row_numbers <-
 # select the corresponding records from 
 all_combos[selected_row_numbers, c(2,1)]
 ```  
+-->
+## Who's where?
 
-### Who's where?
+If at least one Adelie penguin was observed on on Biscoe Island, then there will be *at least one record* in the `penguins` data set that includes the combination "Adelie" for `species` and "Biscoe" for `island`, right?  
 
-If at least one Adelie penguin was observed on on Biscoe Island, then there will be *at least one record* in the `penguins` data set that includes the combination "Adelie" and "Biscoe", right?  
-
-If there were never a Chinstrap penguin observed on Dream Island, there would not be any record in the data set with the combination of "Chinstrap" and "Dream", right?
+If there were _never_ a Chinstrap penguin observed on Dream Island, there would not be any record in the data set with the combination of "Chinstrap" for species and "Dream" for island, right?
 
 So think about this next statement carefully until you really understand *why* it's true...
 
-_All we have to do is: 1) select the `island` and `species` columns from the `penguins` data; and 2) find the unique records cross those columns!_
+_All we have to do is: 1) select the `island` and `species` columns from the `penguins` data; and 2) find the unique records across those two columns!_
 
-Remember that when you select a subset of columns from a data.frame, the result in also a data.frame -- with fewer columns!
+Make sense?  Hopefully that seems simple enough -- at least in concept.  If you are still a little confused, keep going.  I think it will become clearer.
 
-You could try to write a function to find the unique records in a data.frame, but this is the type task where you should ask yourself "Is there already a function that does that?"
+Remember that when you select a subset of columns from a data.frame, the result in also a data.frame -- just with fewer columns!
+
+Also, you could try to write a function to find the unique records in a data.frame, but this is the type task where you should ask yourself "Is there already a function that does that?"
 
 Use the internet to search for a function that will return the unique records in a data.frame.
 
@@ -244,7 +261,7 @@ quiz(
 OK, we've talked about it enough.  Let's do it!
 
 - Use indexing (the `[` operator) to select the `island` and `species` columns from `penguins`.
-- Pass the result to `distinct()`.  Do this second step by nesting the indexed data set within distinct, rather than by storing the indexed data set to a name.
+- Pass the result to `distinct()`.  Do this second step by nesting the indexed data set within `distinct()`, rather than by storing the indexed data set to a name.
 
 Hint: What package is `distinct()` in again?  Remember, you don't need to load the entire package to use one function.  Use the `::` operator!
 
@@ -520,17 +537,17 @@ grade_this( {
 quiz(
   question_text(
     "What do you conclude at the relationship between flipper length and bill length *within* each species?",
-    answer_fn(submitToTA),
+    answer_fn(ENSC311::submitToTA),
     rows = 2,
     correct = "Thanks. The TA will evaluate your answer.  A correct answer would be something like 'Within each species, the bill length is positively correlated with flipper length and the slope of the relationship is similar regardless of species.'"),
   question_text(
     "What do you conclude at the relationship between flipper length and bill length when you compare *across* the different species?",
-    answer_fn(submitToTA),
+    answer_fn(ENSC311::submitToTA),
     rows = 4,
     correct = "Thanks. The TA will evaluate your answer.  A correct answer would be something like 'Adelie and Chinstrap penguins have roughly the same range of flipper length, but Chinstraps have overall, longer bills that Adelies.  Gentoos have longer flippers than the other two species, but the range in bill length is similar to Chinstraps.  The ratio of flipper length to bill length is similar for Adelie and Gentoo penguins'"),
   question_text(
     "What do you conclude from the fact that `island` seemed to explain some of the variance in the relationship between flipper length bill length?  Does the something about the islands themselves affect this relationship?",
-    answer_fn(submitToTA),
+    answer_fn(ENSC311::submitToTA),
     rows = 4,
     correct = "Thanks. The TA will evaluate your answer.  A correct answer would be something like 'No.  The uneven distribution of spcecies across islands drove the pattern in the graph where color represented island.  Chinstraps are only on Dream Island, and Gentoos are only on Biscoe Island, so species drove a segregation of colors for those islands.  Adelie penguins are on all of the islands, explaining the overlap in island colors in the lower left part of the graph where data were colored by island.'")
 )  

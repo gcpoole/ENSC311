@@ -1,0 +1,283 @@
+---
+title: "ENSC311 Lec 07: Vectors and Base R graphs!"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+description: "Introducing vectors and base R plotting."
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(learnr)
+library(ENSC311)
+gradethis::gradethis_setup()
+options(tutorial.event_recorder = ENSC311::recorder)
+```
+
+## Vectors
+
+In the last tutorial, we described literals -- numerals and other characters we can enter into R to create numeric, logical, character, or date/time data.
+
+We also covered assigning values to names using the assignment operator.
+
+Putting those two skills together, we can store and retrieve value in R.  We can also pass named values to functions as arguments.
+
+```{r, echo = TRUE}
+example_value <- 25
+example_value
+sqrt(example_value)
+```
+
+Imagine doing a data analysis on millions of data points if you had to name each data point individually?  Thankfully, R doesn't make you do that.
+
+R has many tricks up it's sleve for managing data in the computer's memory.  The most basic trick is called a "vector."
+
+### Many values, one name
+
+Vectors allow us to assign a collection of values to a name.  For instance, the function `c()` combines all of the arguments it receives into a vector.
+
+```{r, echo = TRUE}
+example_vector <- c(1, 2, 3, 9, 8, 7, 4, 5, 6)
+example_vector
+```
+
+Try it yourself:
+
+- Create a vector containing the integer values from 5 to 9 and assign it to the name `my_vector`.
+- Display `my_vector`
+
+```{r vector_using_c, exercise = TRUE}
+my_vector <- c(5, 6, 7, 8, 9)
+my_vector
+```
+
+### The `...` parameter
+
+If you are paying careful attention, you might notice that the example passed nine parameters to `c()` but in the sandbox, you passed only five parameters.
+
+In the last tutorial, you learned that functions had a fixed number of parameters, each of which needs an argument.  So what's up with `c()`?
+
+Let's look at the definition:
+
+```{r, echo = TRUE}
+c
+```
+
+Huh.  The parameter for `c()` is `...`.  That's odd.
+
+In R, `...` is a special parameter.  It can accept a collection of values.  This seems to break the one argument for each parameter rule.  Later in the course, we'll discuss why this doesn't break the rule.  For now, any time you see the `...` argument, you can assume the function will take as many arguments as you would like to pass in.
+
+## Sequences
+
+`c()` gives you the ultimate flexibility in creating vectors, at the expense of have to type every value.  Many times, though, there are patterns to the vectors we want to create.  In these circumstance, there are operators and functions that can help.  For instance, there are simple ways to create sequences of values in R.
+
+### Integer sequences
+
+The `:` operator allows you to make sequences of integers with an interval of one.  Have a look:
+
+```{r, echo = TRUE}
+example_sequence <- 1:20
+example_sequence
+```
+
+Can you use the `:` operator to make a vector of integers from -10 to 10?
+
+```{r vector_using_colon_1, exercise = TRUE}
+-10:10
+```
+
+What happens when you reverse the numbers?
+
+```{r vector_using_colon_2, exercise = TRUE}
+10:-10
+```
+
+### Real sequences
+
+The `seq()` function is a more flexible way of making sequences.  Let's look at the definition:
+
+```{r, echo = TRUE}
+seq
+```
+
+That's not very helpful.  The definition says `seq()` uses the `...` parameter.  So we can pass anything we want.  Let's go to the help system...
+
+Enter `?seq` into the console now.  
+
+Read about the `from`, `to`, and `by` parameters in the help file.  
+
+In the sandbox below:
+
+- Call the `seq()` function; pass `30` to the `from` parameter, `40` to the `to` parameter, and `2` to the `by` parameter.
+
+```{r vector_using_seq_1, exercise = TRUE}
+seq(30, 40, 2)
+```
+
+Try calling `seq()` again.  But this time, reverse the `from` and `to` values so that the sequence can go in reverse.  I've entered the code for you.  
+
+Try running the code.  It will cause an error.  Now see if you can diagnose and correct the code so you get:
+
+```{r}
+seq(40,30, -2)
+```
+
+(The solution isn't available in this sandbox.  The error message has the information you need to correct the error.  Just think about it carefully...)
+
+```{r vector_using_seq_2, exercise = TRUE, exercise.reveal_solution = FALSE}
+#+ seq(40, 30, 2)
+seq(40, 30, -2)
+```
+
+What about fractional increments? 
+
+- call `seq()` with `from = 20`, `to = 30`, and `by = 2.2`.  Pay special attention to the final number in the resulting sequence.
+
+```{r}
+seq(30, 40, 2.2)
+```
+
+```{r seq_quiz}
+quiz(
+  question("Why is the final value of the last sequence 38.8 instead of 40?",
+    answer("Because the difference between 40 and 38.8 is less than 2.2"),
+    answer("Because 10 divided by 2.2 is not a whole number"),
+    answer("Because 2.2 times 6 is greater than 40"),
+    answer("All of the above.", correct = TRUE)
+  )
+)
+```
+
+### More on passing arguments.
+
+`seq()` provides a good opportunity to understand a little more about passing arguments to functions.  
+
+We've learned that it's important to pass arguments in the order expected by the function.  For instance, if we want the sequence from 10 to 100 with an interval of 5, this works:
+
+```{r, echo=TRUE}
+seq(10, 100, 5)
+```
+
+but this does not:
+
+```{r, echo=TRUE, error = TRUE}
+seq(10, 5, 100)
+```
+
+Another way to pass arguments is to use the notation `parameter_name = argument_value` within the parentheses.
+
+If we are explicit, we can pass values in any order.  For instance:
+
+```{r, echo=TRUE}
+seq(from = 10, by = 5, to = 100)
+```
+
+Try it yourself:
+
+- Pass the following parameters to `seq()` in the following order: `by=2`, `to=10`, `from = 0`
+
+```{r pass_explicit_parameters, exercise=TRUE}
+#+ seq(by = ___, to = ___, from = ___)
+seq(by = 2, to = 10, from = 0)
+```
+
+We can also mix explicit parameters with passing in order.  For instance:
+
+```{r, echo=TRUE}
+seq(0, by = 2, 10)
+seq(by = 2, to = 10, 0)
+```
+
+In the case of a mixture of arguments -- some explicitly associated with parameters and others not -- R matches all of the parameters that have specified arguments first, and then fills in the remaining unspecified parameters with remaining arguments, by order.
+
+For instance, in the example `seq(to = 10, by = 2, 0)`, R put `10` in the `to` parameter and `2` in the `by` parameter becuase they are named explicily.  This leaves the `from` parameter as the first unassigned parameter for `seq()`, so that's where the `0` goes.
+
+Now you try:
+
+- Create the same sequence as above by calling `seq()`, but pass `by` first (explicitly) and the remaining parameters by order.
+
+```{r, pass_mixed_parameters, exercise=TRUE}
+#+ seq(by = ___, ___, ___)
+seq(by = 2, 0, 10)
+```
+
+### More little more about `seq()`
+
+`seq()` can create a sequence of a fixed length between any two numbers.  But to do this, you have to skip the `by` parameter (not pass any value to `by`), but instead, pass the length of the desired sequence to a different parameter.
+
+Using the console, open the help for `seq()`.  Find the parameter that controls the length of the desired sequence.  Then, in the sandbox below:
+
+- Use `seq()` create a sequence of length `10` starting at `15.23` and ending a `30.24`; to do this, you'll have to pass `10` explicitly to the length parameter that you identified in help.
+
+```{r, fixed_length_seq, exercise=TRUE}
+seq(15.23, 30.24, length.out = 10)
+```
+
+## Repeating values
+
+The function `rep()` creates a vector of repeated values.
+
+Look at the help for `rep()`.   Then:
+
+- Create a vector were the value 10 is repeated 20 times
+
+```{r, rep_a_value, exercise=TRUE}
+rep(10, 20)
+```
+
+Now, using `rep()` and `:`
+
+- create the following vector:
+```{r}
+rep(1:5, 3)
+```
+
+```{r, rep_and_colon, exercise=TRUE}
+rep(1:5, 3)
+```
+
+Now, using `rep()` and `c()`
+
+- create the following vector:
+```{r}
+rep(c(5,9,2), 4)
+```
+
+```{r, rep_and_c, exercise=TRUE, exercise.reveal_solution = FALSE}
+rep(c(5,9,2), 4)
+```
+
+## Vectors of random values
+
+We can create vectors of random values in a number of ways.  
+
+We'll start with the `sample()` function, which draws items at random from another vector.
+
+`letters` is a vector built into R that contains the letters of the alphabet.  Read the help on `sample()`.
+
+In the sandbox below:
+
+- draw 5 letters, at random, from the `letters` vector; assign the result to the name `some_letters`
+- display `some_letters`
+
+```{r sample_letters, exercise=TRUE}
+some_letters <- sample(letters, 5)
+some_letters
+```
+
+We can also draw real numbers at random from an underlying distribution such as a uniform or normal distribution using `runif()` ("random uniform") and `rnorm()` ("random normal").
+
+Read the help for `rnorm()` and in the sandbox below:
+
+- create a vector of 10000 random numbers drawn from a normal distribution with a mean of 3 and a standard deviation of 6; assign the vector to the name `random_normal`
+- create a histogram of the vector by passing `random_normal` to a function called `hist()`.
+
+```{r sample_normal, exercise=TRUE}
+random_normal <- rnorm(10000, mean = 3, sd = 6)
+hist(random_normal)
+```
+
+## Plotting
+
+Stuff about plots

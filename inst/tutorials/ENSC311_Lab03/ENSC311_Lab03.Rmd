@@ -4,7 +4,7 @@ output:
   learnr::tutorial:
     progressive: true
 runtime: shiny_prerendered
-description: "An R learing lab exploring probablity distributions associated with rolling dice.  In this lab, you will build and demonstrate proficiency in working integer, real, and logical vectors in R."
+description: "An R learning lab exploring probablity distributions associated with rolling dice.  In this lab, you will build and demonstrate proficiency in working integer, real, and logical vectors in R."
 ---
 
 <!-- 
@@ -239,8 +239,7 @@ grade_code()
 
 ### Roll *a lot*!
 
-Again, copy your code from the prior exercise and paste it below.  
-
+- Copy your code from the prior exercise and paste it below.  
 - Modify your code so that it simulates rolling the dice 100,000 times!
 - Run the code a few times to see how the histogram responds with each new set of 100,000 rolls.
 
@@ -249,14 +248,14 @@ Again, copy your code from the prior exercise and paste it below.
 ```
 
 ```{r roll_the_dice_10000-solution}
-many_rolls <- 
-  sample(
-    twelve_sided, 
-    100000, 
-    replace = TRUE)
+twelve_sided <- 1:12
+many_rolls <- sample(
+  twelve_sided, 
+  100000, 
+  replace = TRUE)
 hist(
   many_rolls, 
-  breaks = seq(0.5, 6.5, 1))
+  breaks = seq(0.5, 12.5, 1))
 ```
 
 ```{r roll_the_dice_10000-code-check}
