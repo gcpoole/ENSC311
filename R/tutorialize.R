@@ -210,7 +210,11 @@ tutorialize <- function(package_dir = getwd()) {
             get_starter_code(chunk),
             "```",
             "")
+          if(tokens[1] == "whats_exp1") {
+            exp(1)
+          }
           solution_chunk <- get_solution_code(chunk, tokens[1])
+
           if(length(solution_chunk) > 0 )
             code_check_chunk <- c(
               paste0("```{r ", tokens[1], "-code-check}"),
@@ -245,10 +249,13 @@ get_starter_code <- function(chunk) {
 
 get_solution_code <- function(chunk, chunk_name) {
   chunk <- chunk[!grepl("^#+", chunk)]
-  if(length(chunk) == 0) return(character(0))
+  chunk <- chunk[!grepl("^```", chunk)]
+  if(length(chunk[!grepl("^[[:space:]]*$", chunk)]) == 0)
+    return(character(0))
   c(
     paste0("```{r ", chunk_name, "-solution}"),
-    chunk[-1],
+    chunk,
+    "```",
     ""
   )
 }

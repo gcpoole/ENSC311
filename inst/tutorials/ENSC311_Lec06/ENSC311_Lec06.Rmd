@@ -98,7 +98,7 @@ In R, data can be non-numeric, too!  For instance, there are `logical` data (jus
 - character data: quoted text (e.g., `"Literal character"`, `"So is this"`, `"Bobcats are #1"`)
 - date data: quoted date in YYYY-MM-DD (e.g., `"2024-08-24"`)
 
-Notice the quotation marks around the character and date literals.  They must be included in your code to make a character or date literal!
+Notice the quotation marks around the character and date literals.  Quotation marks must be included in your code to make a character or date literal!
 
 The same thing happens any time we enter any sort of literal, whether logical, character, or date.  R interprets the characters we type, creates the associated value in the computer's memory, then converts the value back to a representation we can read, and prints it to the screen.
 
@@ -108,17 +108,17 @@ When you think you have done it correctly, press the "run code" button. When you
 
 So try the following -- again, use one (or more) lines of code for each bullet point.
 
-- Enter a character literal "I am learning R!"
-- On a new line, enter the literal representation of the logical value for "true."
-- On another new line, enter the date literal for "July 4, 1776."
+- Enter the literal representation of the logical value for "true."
+- On a new line, enter a character literal "I am learning R!"
+- On another new line, enter the date literal for July 4, 1776.
 
 ```{r try_literals, exercise=TRUE}
 
 ```
 
 ```{r try_literals-solution}
-"I am learning R!"
 TRUE
+"I am learning R!"
 "1776-07-04"
 ```
 
@@ -347,12 +347,6 @@ OK, if `exp(1)` is a function call, try executing it and see what you get.  (I'v
 exp(1)
 ```
 
-```{r whats_exp1-solution}
-```
-
-```{r whats_exp1-code-check}
-grade_code()
-```
 
 Hmmm... the default value for the `base` parameter in the `log()` function is 2.718282.  In other words, when I call `log()` with just:
 
@@ -442,12 +436,6 @@ Now that you know about functions, let's talk about operators.  `+` is an operat
 2+2
 ```
 
-```{r plus_operator-solution}
-```
-
-```{r plus_operator-code-check}
-grade_code()
-```
 
 Operators are functions; most have two parameters.  The arguments, however, are not placed in parentheses, but are place ahead of and after the operator.  Mathematical operators include:
 
