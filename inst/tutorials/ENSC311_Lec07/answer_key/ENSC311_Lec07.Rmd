@@ -278,6 +278,54 @@ random_normal <- rnorm(10000, mean = 3, sd = 6)
 hist(random_normal)
 ```
 
+## Indexing vectors
+
+"Indexing" is a way of pulling a specific subset out of a vector.  For instance, let's consider the `letters` vector -- a character vector that is built into R.
+
+```{r, echo = TRUE}
+letters
+```
+
+To index something we use the `[` (square bracket) operator.  We can index a vector based on the position of the values in a vector.  For instance, we can extract the second half of the alphabet from letters like this:
+
+```{r, echo = TRUE}
+letters[14:26]
+```
+
+Now you try.
+
+- Use indexing to extract the every other letter of the alphabet from `letters`, starting with the letter "b":
+
+```{r every_other_letter, exercise = tutorialize}
+letters[seq(2,26, 2)]
+```
+
+Remember, square brackets are not like parentheses.  You can't enter multiple values separated by commas.  You need to use place a vector inside the square brackets.  
+
+Try running the following code.  You will get an error.  Then:
+
+- Fix the code so that it returns the 13th, 19th, and 21st letter of the alphabet. 
+
+```{r index_MSU, exercise = tutorialize}
+#+ LETTERS[13, 29, 21]
+LETTERS[c(13, 29, 21)]
+```
+
+Indexes don't have to be an ascending order.
+
+- What happens when you index `letters` using all of the integers starting at 26 and descending down to 1?
+
+```{r reverse_letters, exercise = tutorialize}
+letters[26:1]
+```
+
+- What secret message you get when you pull the following positions from `letters` - c(4,15,14,20,23,15,18,18,25,2,5,8,1,16,16,25)
+
+```{r be_happy, exercise = tutorialize}
+letters[c(2,5,8,1,16,16,25)]
+```
+
+
 ## Plotting
 
 Stuff about plots
