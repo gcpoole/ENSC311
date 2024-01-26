@@ -140,12 +140,12 @@ tutorialize <- function(package_dir = getwd()) {
       markdown[(yaml_delimiter[2]+1):length(markdown)])
 
     code_breaks <- which(grepl("^```", markdown, perl = T))
+    if(length(code_breaks)%%2 == 1) stop("Un-closed code block in '", file_name, "'.")
     #  code_starts = which(grepl("^```\\{r", markdown, perl = T))
     if(length(code_breaks) > 0) {
-      if(length(code_breaks)%%2 == 1) stop("Un-closed code block in '", filename, "'.")
 
       # if text is at end of file, need to append eof+1 as start of a code break.
-      if(length(markdown) > tail(code_breaks, 1)) c(code_breaks, length(markdown)+1)
+      if(length(markdown) > tail(code_breaks, 1)) code_breaks <- c(code_breaks, length(markdown)+1)
       # adjust the ending code breaks to refer to first line of text.  That way
       # pointers are pointing as start of code and start of text.
       code_breaks <- c(1, suppressWarnings(code_breaks + c(0,1)))
@@ -160,6 +160,8 @@ tutorialize <- function(package_dir = getwd()) {
       chunk_names <- sapply(token_list, `[`, 1)
       names(chunks)[code_idx] <- sapply(token_list, `[`, 1)
 
+      setups_to_remove <- character(0)
+
       for(i in 1:length(code_idx)) {
         tokens <- token_list[[i]]
         code_i <- code_idx[i]
@@ -170,70 +172,105 @@ tutorialize <- function(package_dir = getwd()) {
             "Use 'TRUE' rather than 'T' for learnR options, line ",
             min(attr(chunk, "lines")))
 
-        if(any(grepl("^exercise=TRUE$", tokens))) {
+        if(any(grepl("^exercise=", tokens))) {
           if(tokens[1] == "") {
             stop(
               "Unnamed exercises detected, line ",
               min(attr(chunk, "lines")))
           }
 
-          setup_token <- tokens[grepl("^exercise.setup=", tokens)]
-          if(length(setup_token) == 0)
-            setup_chunk <- character(0)
-          else {
-            setup_source <- strsplit(setup_token, "=")[[1]][2]
-            source_idx <- which(names(chunks) == setup_source)
-            if(length(source_idx) == 0)
-              stop(
-                "The requested setup '",
-                setup_source,
-                "' is not a chunk name")
-            if(any(!c("setup", "solution") %in% names(chunks[[setup_source]])))
-              stop(
-                "The requested setup '",
-                setup_source,
-                "' must be an exercise and must appear before any reference to it.")
-            setup_code <- get_assignment_ops(chunks[[setup_source]][["setup"]])
-            solution_code <- get_assignment_ops(chunks[[setup_source]][["solution"]])
-            setup_chunk <- c(
-              paste0("```{r ", tokens[1], "-setup}"),
-              setup_code,
-              solution_code,
+          if(any(tokens == "exercise=tutorialize")) {
+            # change to exercise = tutorialize to exercise = TRUE
+            tokens[tokens == "exercise=tutorialize"] <- "exercise=TRUE"
+
+            setup_token <- tokens[grepl("^exercise.setup=", tokens)]
+            if(length(setup_token) == 0)
+              setup_chunk <- character(0)
+            else {
+              setup_source <- strsplit(setup_token, "=")[[1]][2]
+              source_idx <- which(names(chunks) == setup_source)
+              if(length(source_idx) == 0)
+                stop(
+                  "The requested setup '",
+                  setup_source,
+                  "' is not a chunk name")
+              if(any(!c("setup", "solution") %in% names(chunks[[setup_source]])))
+                stop(
+                  "The requested setup '",
+                  setup_source,
+                  "' must be an exercise and must appear before any reference to it.")
+
+              # create a vector that will be added to.
+              setup_code <- character(0)
+
+              # there might be manually-defined setup_code for the chunk
+              # referenced by the setup token.  If so, find it and pull the
+              # assignment_ops
+              referenced_manual_setup <- paste0(setup_source, "-setup")
+              if(!is.null(chunks[[referenced_manual_setup]]) && !referenced_manual_setup %in% setups_to_remove)
+                setup_code <- c(setup_code, get_assignment_ops(chunks[[referenced_manual_setup]]))
+              # now parse the tutorialize setup chunk
+              setup_code <- c(
+                setup_code,
+                get_assignment_ops(chunks[[setup_source]][["setup"]]))
+
+              # now look for solution code in the referenced chunk
+              solution_code <- get_assignment_ops(chunks[[setup_source]][["solution"]])
+              setup_code <- c(setup_code, solution_code)
+
+              # now, there could be a manual setup chunk for the current chunk.
+              # If so, add that
+              current_manual_setup <- paste0(tokens[1], "-setup")
+              if(!is.null(chunks[[current_manual_setup]])) {
+                current_manual_setup_chunk <- chunks[[current_manual_setup]]
+                setup_code <- c(
+                  setup_code,
+                  current_manual_setup_chunk[!grepl("^```", current_manual_setup_chunk)])
+                # tag the manual setup chunk for the current code for removal
+                # because it's been added to the tutorialize setup chunk we are
+                # building
+                setups_to_remove <- c(setups_to_remove, current_manual_setup)
+              }
+
+              setup_chunk <- c(
+                paste0("```{r ", tokens[1], "-setup}"),
+                setup_code,
+                "```",
+                "")
+              # get rid of setup token because each exercise chunk will have its
+              # own setup
+              tokens <- tokens[-which(tokens == setup_token)]
+            }
+            exercise_chunk <- c(
+              paste0("```{r ", paste(tokens, collapse = ", "), "}"),
+              get_starter_code(chunk),
               "```",
               "")
-            # get rid of setup token because each exercise chunck will have its
-            # own setup
-            tokens <- tokens[-which(tokens == setup_token)]
-          }
-          exercise_chunk <- c(
-            paste0("```{r ", paste(tokens, collapse = ", "), "}"),
-            get_starter_code(chunk),
-            "```",
-            "")
-          if(tokens[1] == "whats_exp1") {
-            exp(1)
-          }
-          solution_chunk <- get_solution_code(chunk, tokens[1])
 
-          if(length(solution_chunk) > 0 )
-            code_check_chunk <- c(
-              paste0("```{r ", tokens[1], "-code-check}"),
-              "grade_code()",
-              "```")
-          else
-            code_check_chunk <- character(0)
+            solution_chunk <- get_solution_code(chunk, tokens[1])
 
-          chunks[[code_i]] <- structure(
-            list(
-              setup = setup_chunk,
-              exercise = exercise_chunk,
-              solution = solution_chunk,
-              code_check = code_check_chunk),
-            lines = attr(chunk, "lines"))
+            if(length(solution_chunk) > 0 )
+              code_check_chunk <- c(
+                paste0("```{r ", tokens[1], "-code-check}"),
+                "grade_code()",
+                "```")
+            else
+              code_check_chunk <- character(0)
+
+            chunks[[code_i]] <- structure(
+              list(
+                setup = setup_chunk,
+                exercise = exercise_chunk,
+                solution = solution_chunk,
+                code_check = code_check_chunk),
+              lines = attr(chunk, "lines"))
+          }
         }
       }
     }
 
+    if(length(setups_to_remove) > 0)
+      chunks <- chunks[-which(names(chunks) %in% setups_to_remove)]
     markdown <- unname(unlist(chunks))
 
     writeLines(unlist(chunks), outfile_path)
@@ -263,8 +300,12 @@ get_solution_code <- function(chunk, chunk_name) {
 get_assignment_ops <- function(chunk) {
   if(length(chunk) == 0) return(character(0))
   chunk <- chunk[!grepl("^```", chunk) & nchar(chunk) > 0]
-  funs <- sapply(chunk, \(x) as.character(as.list(str2lang(x))[[1]]) %in% c("<-", "=", "assign"))
-  chunk[funs]
+  commands <- parse(text = chunk)
+  command_strings <- lapply(commands, deparse)
+  types <- sapply(commands, class)
+  assign_ops <- types %in% c("<-", "=")
+  assign_calls <- grepl("^assign\\(", sapply(command_strings, `[`, 1))
+  unlist(command_strings[assign_ops | assign_calls])
 }
 
 get_tokens <- function(chunk) {

@@ -379,3 +379,7 @@ hist(random_normal)
 ```{r sample_normal-code-check}
 grade_code()
 ```
+
+## Plotting
+
+Stuff about plots

@@ -53,7 +53,7 @@ Go ahead and try it.  Below is an "R sandbox" that allows you to enter and play 
 
 Once you have gotten that to work, you can click the "submit" button.  The tutorial will check your answer and provide feedback if you have entered something unexpected.
 
-```{r enter_numeric_literal, exercise = TRUE}
+```{r enter_numeric_literal, exercise = tutorialize}
 15.23
 ```
 
@@ -103,7 +103,7 @@ So try the following -- again, use one (or more) lines of code for each bullet p
 - On a new line, enter a character literal "I am learning R!"
 - On another new line, enter the date literal for July 4, 1776.
 
-```{r try_literals, exercise=TRUE}
+```{r try_literals, exercise = tutorialize}
 TRUE
 "I am learning R!"
 "1776-07-04"
@@ -141,7 +141,7 @@ Now you try:
 
 - In the sandbox below, instruct R to calculate the square root of `360` and press "run code".
 
-```{r sqrt, exercise = TRUE}
+```{r sqrt, exercise = tutorialize}
 sqrt(360)
 ```
 
@@ -169,7 +169,7 @@ Give it a try:
 
 - display the definition of the `sqrt()` function:
 
-```{r display_sqrt, exercise=TRUE}
+```{r display_sqrt, exercise = tutorialize}
 sqrt
 ```
 
@@ -226,7 +226,7 @@ Now let's consider the `log()` function, which calculates logarithms.
 
 Display the definition of the `log` function and check out its parameters:
 
-```{r params_of_log, exercise = TRUE}
+```{r params_of_log, exercise = tutorialize}
 log
 ```
 
@@ -256,7 +256,7 @@ Oh, and argument order matters!  Because `x` is listed first in the function def
 
 See if you can use the `log()` function to calculate the logarithm of `100` in base `10`.  (The answer is `2`; see if you can get it right without viewing the solution first.)
 
-```{r log_function, exercise=TRUE}
+```{r log_function, exercise = tutorialize}
 log(100, 10)
 ```
 
@@ -294,7 +294,7 @@ quiz(
 
 OK, if `exp(1)` is a function call, try executing it and see what you get.  (I've put the code in the sandbox for you.  All you need to do is click "run code".)
 
-```{r whats_exp1, exercise=TRUE}
+```{r whats_exp1, exercise = tutorialize}
 #+ exp(1)
 ```
 
@@ -382,7 +382,7 @@ Well that was easy.
 
 Now that you know about functions, let's talk about operators.  `+` is an operator in R.  Can you imagine what it does?  Try running the following code:
 
-```{r plus_operator, exercise = TRUE}
+```{r plus_operator, exercise = tutorialize}
 #+ 2+2
 ```
 
@@ -400,7 +400,7 @@ There are some others, but these will get you a long ways down the road.  Try th
 - on the next line, divide 10 by 2
 - on the next line raise 2 to the 3rd power.
 
-```{r try_operators, exercise = TRUE}
+```{r try_operators, exercise = tutorialize}
 6*4
 10/2
 2^3
@@ -417,7 +417,7 @@ R follows the standard order of operations for math: exponents first, then multi
 
 Now you try.  If you run the following code, it will return `25`.  Add one pair of parentheses to the code so that the same code return `45` instead.
 
-```{r play_with_parentheses, exercise = TRUE}
+```{r play_with_parentheses, exercise = tutorialize}
 #+ 5 + 4 * 5
 (5 + 4) * 5
 ```
@@ -428,7 +428,7 @@ When you call functions with `()`, they will always execute before any operators
 
 Try finding the sum of the $log_{10}$ of 100 and the square root of 64. (Hint: your answer should be 10...)
 
-```{r sum_functions, exercise = TRUE}
+```{r sum_functions, exercise = tutorialize}
 log(100, 10) + sqrt(64)
 ```
 
@@ -464,7 +464,7 @@ Give it a try.  Remember, enter a command for each bullet point, in the order of
 - square the value of `root` and assign the result to the name "squared_root"
 - display the value of `root_squared`.
 
-```{r square_root_squared, exercise = TRUE}
+```{r square_root_squared, exercise = tutorialize}
 root <- sqrt(136)
 root
 root_squared <- root^2
@@ -482,7 +482,7 @@ y <- x^2
 y
 ```
 
-but using the name `root` and `squared_root` gave some indication of the value the name were associated with.
+but using the name `root` and `squared_root` gave an indication of the value the name were associated with.  When your code gets complex or after you've left it for a while and come back to it, names like `x` and `y` are not helpful for being able to read your code and understadn the role of each variable therein.
 
 By a common convention, names in R are generally built from lower case letters, with the underscore character "_" used to separate words in multi-word names.  "height", "age", or "intercity_distance" are examples of useful and descriptive names that conform to the convention.
 

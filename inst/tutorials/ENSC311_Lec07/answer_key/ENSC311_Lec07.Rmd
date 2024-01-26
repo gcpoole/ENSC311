@@ -47,7 +47,7 @@ Try it yourself:
 - Create a vector containing the integer values from 5 to 9 and assign it to the name `my_vector`.
 - Display `my_vector`
 
-```{r vector_using_c, exercise = TRUE}
+```{r vector_using_c, exercise = tutorialize}
 my_vector <- c(5, 6, 7, 8, 9)
 my_vector
 ```
@@ -83,13 +83,13 @@ example_sequence
 
 Can you use the `:` operator to make a vector of integers from -10 to 10?
 
-```{r vector_using_colon_1, exercise = TRUE}
+```{r vector_using_colon_1, exercise = tutorialize}
 -10:10
 ```
 
 What happens when you reverse the numbers?
 
-```{r vector_using_colon_2, exercise = TRUE}
+```{r vector_using_colon_2, exercise = tutorialize}
 10:-10
 ```
 
@@ -111,7 +111,7 @@ In the sandbox below:
 
 - Call the `seq()` function; pass `30` to the `from` parameter, `40` to the `to` parameter, and `2` to the `by` parameter.
 
-```{r vector_using_seq_1, exercise = TRUE}
+```{r vector_using_seq_1, exercise = tutorialize}
 seq(30, 40, 2)
 ```
 
@@ -125,7 +125,7 @@ seq(40,30, -2)
 
 (The solution isn't available in this sandbox.  The error message has the information you need to correct the error.  Just think about it carefully...)
 
-```{r vector_using_seq_2, exercise = TRUE, exercise.reveal_solution = FALSE}
+```{r vector_using_seq_2, exercise = tutorialize, exercise.reveal_solution = FALSE}
 #+ seq(40, 30, 2)
 seq(40, 30, -2)
 ```
@@ -177,7 +177,7 @@ Try it yourself:
 
 - Pass the following parameters to `seq()` in the following order: `by=2`, `to=10`, `from = 0`
 
-```{r pass_explicit_parameters, exercise=TRUE}
+```{r pass_explicit_parameters, exercise = tutorialize}
 #+ seq(by = ___, to = ___, from = ___)
 seq(by = 2, to = 10, from = 0)
 ```
@@ -197,7 +197,7 @@ Now you try:
 
 - Create the same sequence as above by calling `seq()`, but pass `by` first (explicitly) and the remaining parameters by order.
 
-```{r, pass_mixed_parameters, exercise=TRUE}
+```{r, pass_mixed_parameters, exercise = tutorialize}
 #+ seq(by = ___, ___, ___)
 seq(by = 2, 0, 10)
 ```
@@ -210,7 +210,7 @@ Using the console, open the help for `seq()`.  Find the parameter that controls 
 
 - Use `seq()` create a sequence of length `10` starting at `15.23` and ending a `30.24`; to do this, you'll have to pass `10` explicitly to the length parameter that you identified in help.
 
-```{r, fixed_length_seq, exercise=TRUE}
+```{r, fixed_length_seq, exercise = tutorialize}
 seq(15.23, 30.24, length.out = 10)
 ```
 
@@ -222,7 +222,7 @@ Look at the help for `rep()`.   Then:
 
 - Create a vector were the value 10 is repeated 20 times
 
-```{r, rep_a_value, exercise=TRUE}
+```{r, rep_a_value, exercise = tutorialize}
 rep(10, 20)
 ```
 
@@ -233,7 +233,7 @@ Now, using `rep()` and `:`
 rep(1:5, 3)
 ```
 
-```{r, rep_and_colon, exercise=TRUE}
+```{r, rep_and_colon, exercise = tutorialize}
 rep(1:5, 3)
 ```
 
@@ -244,7 +244,7 @@ Now, using `rep()` and `c()`
 rep(c(5,9,2), 4)
 ```
 
-```{r, rep_and_c, exercise=TRUE, exercise.reveal_solution = FALSE}
+```{r, rep_and_c, exercise = tutorialize, exercise.reveal_solution = FALSE}
 rep(c(5,9,2), 4)
 ```
 
@@ -261,7 +261,7 @@ In the sandbox below:
 - draw 5 letters, at random, from the `letters` vector; assign the result to the name `some_letters`
 - display `some_letters`
 
-```{r sample_letters, exercise=TRUE}
+```{r sample_letters, exercise = tutorialize}
 some_letters <- sample(letters, 5)
 some_letters
 ```
@@ -273,7 +273,7 @@ Read the help for `rnorm()` and in the sandbox below:
 - create a vector of 10000 random numbers drawn from a normal distribution with a mean of 3 and a standard deviation of 6; assign the vector to the name `random_normal`
 - create a histogram of the vector by passing `random_normal` to a function called `hist()`.
 
-```{r sample_normal, exercise=TRUE}
+```{r sample_normal, exercise = tutorialize}
 random_normal <- rnorm(10000, mean = 3, sd = 6)
 hist(random_normal)
 ```
