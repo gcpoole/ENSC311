@@ -1,7 +1,7 @@
 #' @export
 recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
   if(!grepl("^section", event)) {
-    recordFile = file.path(getwd(), "TutorialData.RData")
+    recordFile <- file.path(getwd(), "TutorialData.RData")
     new_data <-
       structure(
         list(
@@ -21,8 +21,4 @@ recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
       tutorial_data <- new_data
     save(tutorial_data, file = recordFile)
   }
-}
-
-get311wd <- function() {
-  getwd()
 }
