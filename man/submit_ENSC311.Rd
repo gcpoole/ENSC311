@@ -20,8 +20,9 @@ Creates a homework submission file in your working directory.
 }
 \details{
 To use this function, first run the function without passing arguments.
-Examine the resulting list of files to be created and then run the function
-again, passing the index number of the file to be created.
+Examine the resulting list of files that can be created and determine the
+index of the file you want to create. and then run the function again,
+passing the index number of the file to be created.
 
 You can determine your working directory (where the file is created) with
 \code{\link{getwd}}.

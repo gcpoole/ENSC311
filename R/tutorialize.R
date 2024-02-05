@@ -10,7 +10,7 @@ tutorialize_setup <- function(tutorial_name, package_dir = getwd()) {
   if(file.exists(key_dir))
     stop("'", tutorial_dir, "' already contains an 'answer_key' directory.")
 
-  # make sure the .Rmd file exist
+  # make sure the .Rmd file exists
   tutorial_file_name <- paste0(tutorial_name, ".Rmd")
   tutorial_file_path <- file.path(tutorial_dir, tutorial_file_name)
   if(!file.exists(tutorial_file_path))
@@ -31,7 +31,7 @@ tutorialize_setup <- function(tutorial_name, package_dir = getwd()) {
   else
     stop("Failed to copy '", tutorial_file_path, "' to '", key_dir, "'.")
 
-  # throw a warning if copy is successfuly but deletion is not.
+  # throw a warning if copy is successful but deletion is not.
   if(!removed)
     warning(
       "'", tutorial_file_name, "' successfully copied to '",
@@ -124,6 +124,13 @@ tutorialize <- function(package_dir = getwd()) {
       stop("A call to 'gradethis_setup()' in the setup chunk is required.")
     if(!grepl("tutorial\\.event_recorder", markdown))
       warning("No tutorial event recorder is defined in '", file_name, "'.")
+    if(grepl("ENSC311:::recorder", markdown)) {
+      if(
+        !grepl("tutorial:[[:space:]]*<new><line>", markdown) ||
+        !grepl("<new><line>[[:space:]]+id:", markdown)
+      ) stop("Tutorial name (`id:` under 'tutorial:' in YAML header) must be defined to use LRES311::recorder")
+
+    }
 
     markdown <- strsplit(markdown, "<new><line>")[[1]]
 

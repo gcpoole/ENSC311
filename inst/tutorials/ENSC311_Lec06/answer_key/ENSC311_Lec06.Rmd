@@ -1,5 +1,7 @@
 ---
 title: "ENSC311 Lec 06: Literals, functions, names, and vectors"
+tutorial:
+  id: "ENSC311_Lec06"
 output: 
   learnr::tutorial:
     progressive: true
@@ -39,7 +41,7 @@ If you can't read all of those numeral representations twelve, don't worry.  The
 
 ### Numeric literals
 
-In R, numeric literals data values represented by Arabic numerals. When you type series of Arabic numerals into the console, R interprets those numerals and creates the associated value in the computer's memory.  If we don't tell R to do anything else with a number, R converts it back to Arabic numerals and prints it out. 
+In R, numeric literals data values are represented by Arabic numerals. When you type a series of Arabic numerals into the console, R interprets those numerals and creates the associated value in the computer's memory.  If we don't tell R to do anything else with a number, R converts it back to Arabic numerals and prints it out. 
 
 For instance, consider the following:
 
@@ -57,7 +59,7 @@ Once you have gotten that to work, you can click the "submit" button.  The tutor
 15.23
 ```
 
-If asked what happened, someone might say you "entered a number" and, in response, R "printed the number."  But that's not what happened...  
+If asked what happened, someone might say "I entered a number and, in response, R printed the number."  But that's not what happened...  
 
 Rather, you entered 4 Arabic numerals (and a decimal point) and R interpreted that string of numerals to create a number in the computer's memory.  Then R reversed the process and converted the number to numerals, and printed the numerals to the screen so you could read them.
 
@@ -113,7 +115,7 @@ Now that we know how to use literals, we can use literals to explore how functio
 
 ## Functions
 
-Pretty much the only way to do anything in R is to use a function.  Seriously.  That's it.  
+Pretty much the only way to do anything in R is to use a function.  Seriously.  That's it.
 
 You might be able to click a button to do something in RStudio, but RStudio is almost always using R functions in the background.  Rather than click a button, there's almost always a function (or functions) you could use to accomplish the same task. 
 

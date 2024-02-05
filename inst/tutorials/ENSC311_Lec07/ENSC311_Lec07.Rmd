@@ -1,5 +1,7 @@
 ---
 title: "ENSC311 Lec 07: Vectors and Base R graphs!"
+tutorial:
+  id: "ENSC311_Lec07"
 output: 
   learnr::tutorial:
     progressive: true
