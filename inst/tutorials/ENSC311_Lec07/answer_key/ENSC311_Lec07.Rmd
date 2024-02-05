@@ -325,6 +325,103 @@ letters[26:1]
 letters[c(2,5,8,1,16,16,25)]
 ```
 
+### Those pesky bracketed number
+
+Now that you know what indexing is, we're ready to talk about those pesky bracketed numbers that show up when you print a vector.  The numbers are the index values -- the position of values in the vector.
+
+Let's print a vector, in this case, a vector of 20 random numbers between 0 and 1 drawn from a uniform distribution.
+
+```{r, echo=TRUE, eval=FALSE}
+runif(20)
+```
+
+```{r}
+print(runif(20), width = 50)
+```
+
+Notice that the vector is displayed in multiple rows. Each bracketed integer represents the beginning of a new row.  
+
+NOTE: If the window for your tutorial is too narrow, individual rows might be displayed on more than one line.  If this is the case, and you have room on your computer screen, try making your tutorial window wider so that each row is on its own line.
+
+The integer inside the brackets in the index number (position in the vector) of the first value in the row.  
+
+If this doesn't make sense, try counting the values in the vector.  Count values in the first row and then continue your count as you move downs the rows.  Notice that every time you encounter a value at the beginning of a new row, the integer in brackets in equal to your count.  So if the value in brackets is `[5]`, then the first value on that row is the fifth value in the vector.
+
+## Indexing with logicals
+
+Another way to index something in R is to use a vector of logical values.  One way to create a logical vector is to use logical operators, which include:
+
+- is eqaul to: `==` 
+- is less than: `<`
+- is greater than: `>`
+- is less than or equal to: `<=`
+- is greater than or eqaul to: `>=`
+- is not equal to: `!=`
+
+In the sandbox below, I've provided code that will create a vector of 5 random numbers, assign it to the name `random_vals` and then display the values.  Add code to:
+
+- create a logical vector showing which values are less than 0.5 and assign the vector to the name `is_less_than_half`
+- display the logical vector
+- index `random_values` using the logical vector (i.e., enter `random_value[is_less_than_half]`)
+
+```{r is_less_than_half, exercise = tutorialize}
+#+ random_values <- runif(5)
+#+ random_values
+random_values <- runif(5)
+random_values
+is_less_than_half <- random_values < 0.5
+is_less_than_half
+random_values[is_less_than_half]
+```
+
+Once you have the code correct and have submitted it, continue to run the code several times and see what happens.  Compare the location of the values in `random_values` to the location of `TRUE` in `is_less_than_half`.  Then look at the result of `random_values[is_less_than_half]`.  Can you see what is happening?
+
+When you index a vector using logical values (in this case, by typing `random_values[is_less_than_half]`), R selects out all of the values from the vector (`random_values`) where the index (`is_less_than_half`) is `TRUE`.  
+
+In other words, R selects all of the values from `random_value` that are less than 0.5!!
+
+
+## Value names
+
+Until now, when we have referred to "names" in R, we've talked about names that are associated with "objects" in R.  (When I say "object", I'm referring to things like vectors and functions.)  As you know, these object names are created and bound to an object using the assignment `<-` operator.
+
+For instance, I can create and refer to the object name `random_vector` like this:
+
+```{r, echo = TRUE}
+random_vector <- rnorm(5)
+random_vector
+sqrt(random_vector)
+random_vector * 10
+```
+
+There is another type of "name" in R, however.  We can name individual values within vectors.  To do this, we associated a vector of *names* with a vector of *values*.  The *names* must be contained in a character vector.  The values can be a vector of any type.  For instance, I can add value names to random vectors using the `names()` function, like so:
+
+```{r, echo = TRUE}
+names(random_vector) <- c("apple", "banana", "cherry", "dragonfruit", "eggplant")
+random_vector
+```
+
+We call a vector with value names a "named vector."
+
+You might immediately notice that R displays *named* vectors a little differently.  Gone are the index numbers in brackets.  Instead, the value names are printed above the values.
+
+In the sandbox below:
+
+- Make a vector of values from 1 to 26 and assign it to the name `letter_order`.
+- Display `letter order`
+- Use the `names()` function with the assignment operator to set the value names in  `letter_order` equal to the `letters` vector.
+- Display `letter_order` again.
+
+```{r letter_order, exercise = tutorialize}
+letter_order <- 1:26
+letter_order
+names(letter_order) <- letters
+letter_order
+```
+
+### Indexing with names
+
+The most important use of value names is indexing.  If you name the values, it's often times easier to work with the data.  For instance, 
 
 ## Plotting
 

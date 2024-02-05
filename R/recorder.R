@@ -22,3 +22,7 @@ recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
     save(tutorial_data, file = recordFile)
   }
 }
+
+get311wd <- function() {
+  getwd()
+}
