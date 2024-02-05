@@ -570,4 +570,28 @@ but using the name `root` and `squared_root` gave an indication of the value the
 
 By a common convention, names in R are generally built from lower case letters, with the underscore character "_" used to separate words in multi-word names.  "height", "age", or "intercity_distance" are examples of useful and descriptive names that conform to the convention.
 
-Great job!  You've completed the assignment for Lecture 6!
+## Submitting tutorial results
+
+Great job!  You've completed the assignment for Lecture 6!  Now it's time to turn it in...
+
+In the console, enter the following (case sensitive):
+
+```{r, echo=TRUE, eval=FALSE}
+ENSC311::submit_ENSC311()
+```
+
+Your should see something like this:
+
+```{r}
+"ENSC311_Lec06_311_<Posit_Cloud_ID>"
+```
+
+where the end of the character string is an ID that Posit Cloud assigned you.  As you do more tutorials, this list of tutorials you have run will get longer.  But for now there is only one item.  Since you want to turn in the first item on the list, enter:
+
+```{r, echo=TRUE, eval=FALSE}
+ENSC311::submit_ENSC311(1)
+```
+
+A "submit_ENSC311_..." file will appear under the "Files" tab in the lower right pane of RStudio.  Check the box next to the submit file and choose "Export..." from the "More" dropdown on the bar at the top of the tab.  Download the file and sumbit it to D2L.
+
+That's it!  You're all done!
