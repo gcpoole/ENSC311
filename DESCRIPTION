@@ -15,7 +15,8 @@ Suggests:
     learnr
 Imports: 
     gradethis (>= 0.2.14),
-    palmerpenguins
+    palmerpenguins,
+    remotes
 Remotes: 
     rstudio/gradethis
 RoxygenNote: 7.2.3
