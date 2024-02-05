@@ -1,7 +1,10 @@
-#' @export
+
 recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
+  tut_dir <- tut_directory()
+  if(!file.exists(tut_dir)) dir.create(tut_dir)
+  tut_file <- tut_filename(tutorial_id, user_id)
   if(!grepl("^section", event)) {
-    recordFile <- file.path(getwd(), "TutorialData.RData")
+    recordFile <- file.path(tut_dir, tut_file)
     new_data <-
       structure(
         list(

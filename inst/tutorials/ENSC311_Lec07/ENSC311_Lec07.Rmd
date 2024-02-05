@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = FALSE)
 library(learnr)
 library(ENSC311)
 gradethis::gradethis_setup()
-options(tutorial.event_recorder = ENSC311::recorder)
+options(tutorial.event_recorder = ENSC311:::recorder)
 ```
 
 ## Vectors
