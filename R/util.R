@@ -25,7 +25,7 @@ update_ENSC311 <- function() {
 #' @return Either a vector of available homework submission files or TRUE if the
 #'   homework submission file was created in your working directory correctly.
 #'
-#' @param tutorial_idx An index indicating which homework submission file to
+#' @param tutorial_index An index indicating which homework submission file to
 #'   retrieve.  If NULL, the vector of available homework submission files is
 #'   returned.
 #' @export

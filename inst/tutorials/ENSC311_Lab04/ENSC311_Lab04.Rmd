@@ -537,17 +537,17 @@ grade_this( {
 quiz(
   question_text(
     "What do you conclude at the relationship between flipper length and bill length *within* each species?",
-    answer_fn(ENSC311::submitToTA),
+    answer_fn(ENSC311:::submitToTA),
     rows = 2,
     correct = "Thanks. The TA will evaluate your answer.  A correct answer would be something like 'Within each species, the bill length is positively correlated with flipper length and the slope of the relationship is similar regardless of species.'"),
   question_text(
     "What do you conclude at the relationship between flipper length and bill length when you compare *across* the different species?",
-    answer_fn(ENSC311::submitToTA),
+    answer_fn(ENSC311:::submitToTA),
     rows = 4,
     correct = "Thanks. The TA will evaluate your answer.  A correct answer would be something like 'Adelie and Chinstrap penguins have roughly the same range of flipper length, but Chinstraps have overall, longer bills that Adelies.  Gentoos have longer flippers than the other two species, but the range in bill length is similar to Chinstraps.  The ratio of flipper length to bill length is similar for Adelie and Gentoo penguins'"),
   question_text(
     "What do you conclude from the fact that `island` seemed to explain some of the variance in the relationship between flipper length bill length?  Does the something about the islands themselves affect this relationship?",
-    answer_fn(ENSC311::submitToTA),
+    answer_fn(ENSC311:::submitToTA),
     rows = 4,
     correct = "Thanks. The TA will evaluate your answer.  A correct answer would be something like 'No.  The uneven distribution of spcecies across islands drove the pattern in the graph where color represented island.  Chinstraps are only on Dream Island, and Gentoos are only on Biscoe Island, so species drove a segregation of colors for those islands.  Adelie penguins are on all of the islands, explaining the overlap in island colors in the lower left part of the graph where data were colored by island.'")
 )  
