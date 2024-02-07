@@ -6,11 +6,6 @@
 #' @export
 update_ENSC311 <- function() {
   remotes::install_github("gcpoole/ENSC311")
-  # load library in case it's not already loaded; detach will fail otherwise.
-
-  library(ENSC311)
-  detach("package:ENSC311", unload = TRUE)
-  library(ENSC311)
 }
 
 #' Create a homework submission file for ENSC311 tutorials
