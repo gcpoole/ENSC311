@@ -1,5 +1,5 @@
 ---
-title: "ENSC311 Lec 07: Vectors and Base R graphs!"
+title: "ENSC311 Lec 07: Vectors"
 tutorial:
   id: "ENSC311_Lec07"
 output: 
@@ -15,6 +15,7 @@ library(learnr)
 library(ENSC311)
 gradethis::gradethis_setup()
 options(tutorial.event_recorder = ENSC311:::recorder)
+options(tutorial.storage = learnr::filesystem_storage(file.path(path.expand("~"), "_learnr_storage_")))
 ```
 
 ## Vectors
@@ -309,8 +310,8 @@ Try running the following code.  You will get an error.  Then:
 - Fix the code so that it returns the 13th, 19th, and 21st letter of the alphabet. 
 
 ```{r index_MSU, exercise = tutorialize}
-#+ LETTERS[13, 29, 21]
-LETTERS[c(13, 29, 21)]
+#+ LETTERS[13, 19, 21]
+LETTERS[c(13, 19, 21)]
 ```
 
 Indexes don't have to be an ascending order.
@@ -324,7 +325,7 @@ letters[26:1]
 - What secret message you get when you pull the following positions from `letters` - c(4,15,14,20,23,15,18,18,25,2,5,8,1,16,16,25)
 
 ```{r be_happy, exercise = tutorialize}
-letters[c(2,5,8,1,16,16,25)]
+letters[c(4,15,14,20,23,15,18,18,25,2,5,8,1,16,16,25)]
 ```
 
 ### Those pesky bracketed number
@@ -345,7 +346,7 @@ Notice that the vector is displayed in multiple rows. Each bracketed integer rep
 
 NOTE: If the window for your tutorial is too narrow, individual rows might be displayed on more than one line.  If this is the case, and you have room on your computer screen, try making your tutorial window wider so that each row is on its own line.
 
-The integer inside the brackets in the index number (position in the vector) of the first value in the row.  
+The integer inside the brackets is the index number (position in the vector) of the first value in the row.  
 
 If this doesn't make sense, try counting the values in the vector.  Count values in the first row and then continue your count as you move downs the rows.  Notice that every time you encounter a value at the beginning of a new row, the integer in brackets in equal to your count.  So if the value in brackets is `[5]`, then the first value on that row is the fifth value in the vector.
 
@@ -385,25 +386,30 @@ In other words, R selects all of the values from `random_value` that are less th
 
 ## Value names
 
-Until now, when we have referred to "names" in R, we've talked about names that are associated with "objects" in R.  (When I say "object", I'm referring to things like vectors and functions.)  As you know, these object names are created and bound to an object using the assignment `<-` operator.
+Until now, when we have referred to "names" in R, we've we've meant names that are associated with "objects" in R.  (When I say "object", I'm referring to things like vectors or functions.)  As you know, these object names are created and bound to an object using the assignment `<-` operator.
 
-For instance, I can create and refer to the object name `random_vector` like this:
+For instance, I can create the object name `random_vector` like this:
 
 ```{r, echo = TRUE}
-random_vector <- rnorm(5)
+random_vector <- runif(5)*10
 random_vector
+```
+
+and then use it in subsequent operations:
+
+```{r, echo = TRUE}
 sqrt(random_vector)
 random_vector * 10
 ```
 
-There is another type of "name" in R, however.  We can name individual values within vectors.  To do this, we associated a vector of *names* with a vector of *values*.  The *names* must be contained in a character vector.  The values can be a vector of any type.  For instance, I can add value names to random vectors using the `names()` function, like so:
+There is another type of "name" in R, however.  We can name individual values within vectors.  To do this, we associated a vector of *names* with a vector of *values*.  The *names* must be contained in a character vector.  The values can be a vector of any type.  For instance, I can add value names to random vectors using the `names()` function along with the assignment operator, like so:
 
 ```{r, echo = TRUE}
 names(random_vector) <- c("apple", "banana", "cherry", "dragonfruit", "eggplant")
 random_vector
 ```
 
-We call a vector with value names a "named vector."
+We call a vector that has value names a "named vector."
 
 You might immediately notice that R displays *named* vectors a little differently.  Gone are the index numbers in brackets.  Instead, the value names are printed above the values.
 
@@ -423,8 +429,245 @@ letter_order
 
 ### Indexing with names
 
-The most important use of value names is indexing.  If you name the values, it's often times easier to work with the data.  For instance, 
+The most important use of value names is indexing.  If you name the values, it's often times easier to work with the data.  For instance, let's say we have a vector of grades.  In the sandbox below, I've created a vector of grades for five different students -- Anna, Bently, Chloe, Douglas, and Ellen.
 
-## Plotting
+- Below the line of code that is provided, create a vector of the student names (in the order listed above) and assign that vector to the name `student_names`.
+- Using `student_names`, the `names()` function, and the assignment operator `<-`, add value names to the `student_grades` vector.
+- Display the named vector
 
-Stuff about plots
+```{r student_grades, exercise=tutorialize}
+#+ student_grades <- c(89.2, 70.0, 88.2, 99.6, 62.1)
+student_grades <- c(89.2, 70.0, 88.2, 99.6, 62.1)
+student_names <- c("Anna", "Bently", "Chloe", "Douglas", "Ellen")
+names(student_grades) <- student_names
+student_grades
+```
+OK, now I've told you that you can index with value names.  
+
+- See if you can extract Bently's grade from `student_grades` using the literal value `"Bently"` and square brackets `[ ]` (also known as the `[` operator).  Assign the result to the name `grade_bently`.
+- Display `grade_bently`
+
+(Note that you don't have to create student_grades again.  It's ready for use in the sandbox below.)
+
+```{r student_grades_index, exercise=tutorialize, exercise.setup=student_grades}
+grade_bently <- student_grades["Bently"]
+grade_bently
+```
+
+- Try indexing `student_grades` with the value `"bently"` (note the lower case `b`)? (In this case, don't assign the result to a name... just let R display the result)
+
+```{r grades_index_lower_case, exercise=tutorialize, exercise.setup=student_grades}
+student_grades["bentley"]
+```
+
+```{r bently_quiz}
+quiz(
+  question("What value did indexing with `bently` return?",
+    answer("70.0"),
+    answer("NA", correct = TRUE),
+    answer("NULL"),
+    answer("Nothing. R reported an error.")
+  )
+)
+```
+
+- Can you extract the grades for both Chole and Ellen using indexing?
+
+```{r grades_index_two_names, exercise=tutorialize, exercise.setup=student_grades}
+student_grades[c("Chloe", "Ellen")]
+```
+
+The `names()` function can also be used to retrieve the names from a vector.  I've created a vector called `more_student_grades`.
+
+- Display `more_student_grades`
+- See if you can retrive the names from `more_student_grades` and assign those names to `more_student_names`
+- Display the vector associated with `more_student_names`.
+
+```{r more_student_names-setup}
+dummy <- set.seed(330330)
+more_student_grades <- 
+  structure(
+    runif(50) * 30 + 70,
+    names = c("Jaylan", "Luke", "Haiden", "Rowan", "Tessa", "Kash", "Valentin", "Lailah", "Amare", 
+              "Frankie", "Jude", "Maci", "Abigail", "Sawyer", "Lexi", "Reyna", "Elizabeth", "Rylee", "Leroy", 
+              "Camren", "Jordyn", "Kaleigh", "Shyann", "Heaven", "Holden", "Alaina", "Barbara", "Miles", "Isaias", 
+              "Carsen", "Tristian", "Chaz", "Chaim", "Felix", "Leilani", "Kyan", "Ashlyn", "Skylar", "Judah", 
+              "Meredith", "Deangelo", "Dania", "Abdullah", "Aron", "Julianna", "Todd", "Carolyn", "Desmond",
+              "Gabriela", "Lillianna"
+    ))
+```
+
+```{r more_student_names, exercise=tutorialize}
+more_student_grades
+more_student_names <- names(more_student_grades)
+more_student_names
+```
+
+The `class()` funciton shows us the class of a vector (or other R object). In the following sandbox:
+
+- pass `more_student_grades` to the `class()` function and see what happens.
+
+```{r more_student_grades_class, exercise=tutorialize, exercise.setup=more_student_names}
+class(more_student_grades)
+```
+
+Now try with `more_student_names`
+
+- pass `more_student_names` to the `class()` function.
+
+```{r more_student_names_class, exercise=tutorialize, exercise.setup=more_student_names}
+class(more_student_names)
+```
+
+```{r data_type_quiz}
+quiz(
+  question("The class of `more_student_grades` is `numeric`.  It's associated names are:",
+    answer("logical data"),
+    answer("character data", correct = TRUE),
+    answer("also numeric data"),
+    answer("a special type of data reserved for names.")
+  )
+)
+```
+
+The following should not surprise you:
+
+```{r, echo=TRUE}
+10 < 20
+10 > 20
+```
+
+This, however, might surprise you:
+
+```{r, echo=TRUE}
+"a" < "b"
+"apple" > "apps"
+```
+
+You can use `<`, `>`, `<=`, and `>=` to compare character strings by alphabetical order!  Strings that are later in the alphabet are considered to be "greater than" (larger) than those earlier in the alphabet.
+
+- Can you display a logical vector that has `TRUE` anywhere the student name associated with the values in `more_student_grades` comes before the letter "E" in the alphabet?
+
+```{r names_before_e, exercise=tutorialize, exercise.setup=more_student_names}
+names(more_student_grades) < "E"
+```
+
+### An integrative challenge...
+
+Note: There is certainly more than one way to do the following challenge.  Work on it until you think you have it right.  Then submit your answer.  If the tutorial says your code isn't what was expected, you didn't necessarily get it wrong -- you could have solved the problem in a slightly different way.  Look at the solution and compare your answer.  If you solved the problem in a different way, you'll be learning multiple ways to solve a problem in R!
+
+OK. Here is the challenge.
+
+Let's say you are teaching a course and your section of the course has all of the students whose first names begins with the letters A-M.
+
+- Extract from `more_student_grades` a vector of the grades for all of the students in your section and assign the resulting vector to the name `my_student_grades`
+- Display `my_student_grades`
+- Use `mean()` to display the average of grades in your section.
+
+```{r grades_for_A_to_M, exercise=tutorialize, exercise.setup=more_student_names}
+my_student_grades <- more_student_grades[names(more_student_grades) < "N"]
+mean(my_student_grades)
+```
+
+## Vector math and recycling
+
+One of the most important features of R is "vector math."  
+
+### Vector math
+
+For instance, what happens when you:
+
+- Create a vector of integers from 1 to 10 and assign it to the name `one_to_ten_a`;
+- Create another vector of integers from 1 to 10 and assign it to the name `one_to_ten_b`;
+- Use the addition operator to add `one_to_ten_a` and `one_to_ten_b`.
+
+```{r vector_math_1, exercise=tutorialize}
+one_to_ten_a <- 1:10
+one_to_ten_b <- 1:10
+one_to_ten_a + one_to_ten_b
+```
+
+As you can see, when you add two vectors together, the first values get added, then the second values, and so on.  The same thing is true of all of the math operators.  Try the following:
+
+- multiply one_to_ten_a by one_to_ten_b
+- divide one_to_ten_a by one_to_ten_b
+- subtract one_to_ten_b from one_to_ten_a
+- raise one_to_ten_a to the power of one_to_ten_b
+
+```{r vector_math_2, exercise=tutorialize, exercise.setup=vector_math_1}
+one_to_ten_a * one_to_ten_b
+one_to_ten_a / one_to_ten_b
+one_to_ten_a - one_to_ten_b
+one_to_ten_a^one_to_ten_b
+```
+
+### Recycling
+
+What happens when one vector is shorter that the other?  Let's find out:
+
+- Add `one_to_ten_a` and `c(1,2)`
+
+```{r recycling_1, exercise=tutorialize, exercise.setup=vector_math_1}
+one_to_ten_a + c(1,2)
+```
+
+See the pattern there?  The `1` and `2` are added to first two values of the longer vector, but then we've exhausted the values in `c(1,2)`.
+
+When the end of the shorter vector is reached, R "recycles" the short vector!  In other words, R goes back to the beginning of the short vector as many times as is needed and reuses the values until the end of the long vector is reached.  
+
+In essence, R took:
+
+```{r}
+1:10
+```
+and added
+```{r}
+rep(c(1,2),5)
+```
+
+Try again, only this time:
+
+- Add `one_to_ten_a` and `1:4`
+
+```{r recycling_2, exercise=tutorialize, exercise.setup=vector_math_1}
+one_to_ten_a + 1:4
+```
+
+Here, R took:
+```{r}
+1:10
+```
+and added
+
+```{r}
+rep(1:4, length.out=10)
+```
+
+Notice the warning message "*longer object length is not a multiple of shorter object length*." You should *NEVER* ignore this warning.  
+
+You got this warning because the last value from the short vector used in the calculation was not the final value in the short vector.  In this case, the last value used in the calculation was `2`, but the final value in the short vector is `4`.  This is almost always indicative of some sort of error in your code.  In all of my years of using R, I can remember only twice that I purposefully performed an operation on two vectors where then last value used in the short vector was taken from the middle of the short vector.
+
+Recycling, however, is very powerful and quite necessary for R to operate correctly.  For instance, even though it may not seem obvious until you think about it, R uses recycling for the following:
+
+```{r}
+one_to_ten_a <- 1:10
+```
+```{r, echo=TRUE}
+one_to_ten_a + 20
+```
+
+Yes, `10` creates a vector of length 1:
+
+```{r, echo=TRUE}
+length(20)
+```
+
+So the vector created by the literal value `20` is recycled ten times when it is added to `one_to_ten_a`!
+
+In your lab this week, you'll find a situation where recycling makes life easier!
+
+### Whew!
+
+Wow.  That's a lot of learning packed into one tutorial!  Congratulations on finishing!  If you feel like you can't retain it all, don't worry.  You'll get to opportunity to revisit and apply these ideas many, many times before the course is over!  For now, just relax and turn in your homework using `ENSC311::submit_ENSC311()`.  When you do so, look carefully at the list of options to turn in.  They will be in alphabeticaly not chronilogical order... 
+
+Be sure to choose the number corresponding to the homework for Lecture 7! 

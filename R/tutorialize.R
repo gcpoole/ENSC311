@@ -124,6 +124,8 @@ tutorialize <- function(package_dir = getwd()) {
       stop("A call to 'gradethis_setup()' in the setup chunk is required.")
     if(!grepl("tutorial\\.event_recorder", markdown))
       warning("No tutorial event recorder is defined in '", file_name, "'.")
+    if(!grepl("tutorial.storage", markdown))
+      warning("No tutorial storage location is defined in '", file_name, "'.")
     if(grepl("ENSC311:::recorder", markdown)) {
       if(
         !grepl("tutorial:[[:space:]]*<new><line>", markdown) ||
@@ -286,13 +288,13 @@ tutorialize <- function(package_dir = getwd()) {
 }
 
 get_starter_code <- function(chunk) {
-  chunk <- chunk[grepl("^#+", chunk)]
+  chunk <- chunk[grepl("^#\\+", chunk)]
   if(length(chunk) == 0) return("")
   gsub("^#\\+ ?", "", chunk)
 }
 
 get_solution_code <- function(chunk, chunk_name) {
-  chunk <- chunk[!grepl("^#+", chunk)]
+  chunk <- chunk[!grepl("^#\\+", chunk)]
   chunk <- chunk[!grepl("^```", chunk)]
   if(length(chunk[!grepl("^[[:space:]]*$", chunk)]) == 0)
     return(character(0))

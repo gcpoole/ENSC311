@@ -6,6 +6,9 @@
 #' @export
 update_ENSC311 <- function() {
   remotes::install_github("gcpoole/ENSC311")
+  # load library in case it's not already loaded; detach will fail otherwise.
+
+  library(ENSC311)
   detach("package:ENSC311", unload = TRUE)
   library(ENSC311)
 }
@@ -31,7 +34,7 @@ update_ENSC311 <- function() {
 #' @export
 submit_ENSC311 <- function(tutorial_index = NULL) {
   tut_files <- dir(tut_directory())
-  if(is.null(tutorial_index)) return(tut_files)
+  if(is.null(tutorial_index)) return(structure(tut_files, names = as.character(1:length(tut_files))))
   tutorial_index <- as.integer(tutorial_index)
   if(tutorial_index < 1 || tutorial_index > length(tut_files)) stop("tutorial_index is out of range")
   source_name <- file.path(tut_directory(), tut_files[tutorial_index])
@@ -45,4 +48,18 @@ tut_directory <- function() {
 
 tut_filename <- function(tutorial, user) {
   paste0(basename(tutorial), "_311_", user)
+}
+
+#' @export
+tut_to_tibble <- function(x) {
+  data_list <- lapply(x, \(x) x[[6]])
+
+  tib <-
+    x %>%
+    lapply(\(x) x[-length(x)]) %>%
+    bind_rows() %>%
+    mutate(label = sapply(data_list, \(x) x[["label"]] %>% ifelse(is.null(.), NA, .))) %>%
+    mutate(data = data_list)
+
+  tib
 }

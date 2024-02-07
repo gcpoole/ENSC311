@@ -11,7 +11,7 @@ recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
           list(
             timestamp = Sys.time(),
             tutorial = tutorial_id,
-            versiong = tutorial_version,
+            version = tutorial_version,
             user = user_id,
             event = event,
             data = data)),
