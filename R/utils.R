@@ -5,8 +5,8 @@
 #' Simply run "update_ENSC311()" to get the latest version of the package.
 #' @export
 update_ENSC311 <- function() {
-  remotes::install_github("gcpoole/ENSC311")
   remotes::install_github("gcpoole/tutorialize")
+  remotes::install_github("gcpoole/ENSC311")
   cat("Be sure all files are saved and Restart R from the Session menu.\\n")
   cat("You will need to use `library()` to reload any packages including.\\n")
   cat("the ENSC311 pacakge.\\n")
