@@ -24,7 +24,7 @@ usethis::use_tutorial(
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
 gradethis::gradethis_setup()
-options(tutorial.event_recorder = ENSC311:::recorder)
+options(tutorial.event_recorder = tutorialize::recorder)
 options(tutorial.storage = learnr::filesystem_storage(file.path(path.expand("~"), "_learnr_storage_")))
 
 ```

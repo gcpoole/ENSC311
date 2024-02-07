@@ -8,9 +8,17 @@ output:
 runtime: shiny_prerendered
 description: "An R learning lab exploring the Palmer Penguines data set.  In this lab, you will build and demonstrate proficiency in working with data.frames and plotting with base R syntax."
 ---
-<!-- File created by tutorialize.  Do not edit by hand. -->
 
+<!-- 
+### SO IMPORTANT ######################################################
+To create a new tutorial, use:
 
+usethis::use_tutorial(
+   "<FileName>", 
+   "<tutorialName>", 
+   open = interactive())
+#######################################################################
+-->
 
 ```{r setup, include=FALSE}
 library(learnr)
@@ -190,7 +198,30 @@ We could also read it the other way, concluding Gentoo penguins inhabit Torgerse
 
 Let's make a table like this, but using the actual data in the `penguins` data frame!
 
+<!-- The following code will generate random combinations of `species` and `island` by determining all possible combinations and then selecting a random subset of those combinations.  Play with the code to figure out how it works.  For instance, you might want to insert a line of code to display `all_combos` and then run the code.  Then delete the line that displays `all_combos` and insert a line that displays `n_combos`.  If you look at each intermediate value in the code, you should be able to see how it works!
 
+Once you are done playing, click "start over" and run all the code a few times. The point is see different examples of possible answers to the question "*Which islands have which species?*" so you have an idea of what an answer to that question would look like. 
+
+Remember, each "answer" you get is a *potential* answer, drawn at random from all possible answers.  Once you understand what potential answers look like, you can answer the question by generating a similar table *from the `penguins` data set.*  We'll do that in a moment.  For now, play with this code, see how it works, and then run it a few times to generate some randomized potential answers.
+
+```{r species_island_example, exercise = TRUE, exercise.setup = "pre_penguin"}
+# get all possible combinations of islands and species
+all_combos <- 
+  expand.grid(
+    species = unique(penguins$species),
+    islands = unique(penguins$island))
+# determine how many possible combinations there are
+n_combos <- nrow(all_combos)
+# generate a random number of combinations that will be selected
+n_to_select <- sample(1:n_combos, 1)
+# randomly select `selection_count` row numbers; sort to keep rows in order
+selected_row_numbers <- 
+  sort(
+    sample(1:n_combos, n_to_select))
+# select the corresponding records from 
+all_combos[selected_row_numbers, c(2,1)]
+```  
+-->
 ## Who's where?
 
 If at least one Adelie penguin was observed on on Biscoe Island, then there will be *at least one record* in the `penguins` data set that includes the combination "Adelie" for `species` and "Biscoe" for `island`, right?  
