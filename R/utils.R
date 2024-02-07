@@ -7,9 +7,9 @@
 update_ENSC311 <- function() {
   remotes::install_github("gcpoole/tutorialize")
   remotes::install_github("gcpoole/ENSC311")
-  cat("Be sure all files are saved and Restart R from the Session menu.\\n")
-  cat("You will need to use `library()` to reload any packages including.\\n")
-  cat("the ENSC311 pacakge.\\n")
+  cat("Be sure all files are saved and Restart R from the Session menu.\n")
+  cat("You will need to use `library()` to reload any packages including.\n")
+  cat("the ENSC311 pacakge.\n")
   invisible(TRUE)
 }
 
@@ -37,7 +37,7 @@ submit_ENSC311 <- function(tutorial_index = NULL) {
   if(is.null(tutorial_index)) return(structure(tut_files, names = as.character(1:length(tut_files))))
   tutorial_index <- as.integer(tutorial_index)
   if(tutorial_index < 1 || tutorial_index > length(tut_files)) stop("tutorial_index is out of range")
-  source_name <- file.path(tut_directory(), tut_files[tutorial_index])
+  source_name <- file.path(tutorialize::tut_directory(), tut_files[tutorial_index])
   dest_name <- file.path(getwd(), paste0("submit_", tut_files[tutorial_index]))
   file.copy(source_name, dest_name, overwrite = T)
 }
