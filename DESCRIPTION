@@ -16,7 +16,8 @@ Suggests:
 Imports: 
     gradethis (>= 0.2.14),
     palmerpenguins,
-    remotes
+    remotes,
+    tutorialize
 Remotes: 
     rstudio/gradethis
 RoxygenNote: 7.3.1

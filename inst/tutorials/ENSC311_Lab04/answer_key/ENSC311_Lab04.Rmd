@@ -1,0 +1,558 @@
+---
+title: "ENSC311 Lab 04: Plotting penguins"
+tutorial:
+  id: "ENSC311_Lab04"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+description: "An R learning lab exploring the Palmer Penguines data set.  In this lab, you will build and demonstrate proficiency in working with data.frames and plotting with base R syntax."
+---
+
+<!-- 
+### SO IMPORTANT ######################################################
+To create a new tutorial, use:
+
+usethis::use_tutorial(
+   "<FileName>", 
+   "<tutorialName>", 
+   open = interactive())
+#######################################################################
+-->
+
+```{r setup, include=FALSE}
+library(learnr)
+library(palmerpenguins)
+library(ENSC311)
+options(tutorial.event_recorder = tutorialize::recorder)
+knitr::opts_chunk$set(echo = FALSE)
+gradethis::gradethis_setup()
+```
+
+```{r pre_penguin}
+data(penguins)
+```
+
+```{r pre_year_colors}
+island_colors <- c("red", "gold", "blue")
+data(penguins)
+penguins$year <- factor(penguins$year)
+penguins$plot_color <- island_colors[penguins$year]
+```
+
+## Populations of Penguins
+
+In this week's lab, we're going to peep at properties of penguins -- Palmer Penguins in fact.  
+
+The `palmerpenguins` package contains a data.frame called `penguins`.  The data were collected and made available by [Dr. Kristen Gorman](https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php) and the [Palmer Station, Antarctica LTER](https://pallter.marine.rutgers.edu/), a member of the [Long Term Ecological Research Network](https://lternet.edu/). 
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png){#id .class width=60% height=60%}
+
+### A note about bill dimensions
+
+The culmen is the upper ridge of a bird's bill. In the `penguins` data, culmen length and depth are named `bill_length_mm` and `bill_depth_mm` to be more intuitive.  
+
+For this penguin data, the culmen (bill) length and depth are measured as shown below (thanks Kristen Gorman for clarifying!):
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png){#id .class width=80% height=80%}
+
+So Let's explore the `penguins` data using your R skills!
+
+## Preparing the Package
+
+This week we learned how to load packages, so that the functions in those packages are easily available. Go ahead and:
+
+- load the `palmerpenguins` package
+- display the class of the `penguins` data set
+- display the `penguins` data.
+
+```{r load_penguins, exercise=TRUE}
+
+```
+
+```{r load_penguins-solution}
+library(palmerpenguins)
+class(penguins)
+penguins
+```
+
+```{r load_penguins-code-check}
+grade_code()
+```
+
+```{r table_type_quiz}
+quiz(
+  question(
+    "Based on the `class` of the data set, `penguins` is",
+    answer("just a data.frame"),
+    answer("just a tibble"),
+    answer("neither a data.frame nor a tibble"),
+    answer("both a data.frame and a tibble", correct = TRUE),
+    incorrect = "Incorrect. Remember, a tibble is special type of data.frame that displays differently, but a tibble is still a data.frame!"))
+```
+
+## Exploring the data
+
+### Displaying the stucture of a data.frame
+
+One of the best ways to understand what's in a data set is to look the structure summary.  Go ahead and display the structure summary for `penguins`.
+
+```{r str_penguins, exercise=TRUE, exercise.setup = "pre_penguin"}
+
+```
+
+```{r str_penguins-solution}
+str(penguins)
+```
+
+```{r str_penguins-code-check}
+grade_code()
+```
+
+### Unique values
+
+When you are first working with a data set, one of the most useful bits of information is to understand the characteristics of the data you are working with.  You can explore the data column by column.  For instance, here is the vector of the species of penguins in the data set.
+
+```{r, echo=TRUE}
+as.character(palmerpenguins::penguins$species)
+```
+
+Wow!  Lots of duplicates!  Can you: 
+
+- display a vector that eliminates all of the duplicates and just has one value (a "unique vector") for each value in the `species` column?
+- do the same for the `island` column? 
+- and the `year` column?
+ 
+```{r unique_values, exercise=TRUE, exercise.setup = "pre_penguin"}
+
+```
+
+```{r unique_values-solution}
+unique(penguins$species)
+unique(penguins$island)
+unique(penguins$year)
+```
+
+```{r unique_values-code-check}
+grade_code()
+```
+
+Of course, R can make your life easier.  There's a function called `summary` that is pretty handy to summarize almost anything in R.  It can summarize data.frames.  Try passing `penguins` to the summary function:
+
+```{r summary_penguins, exercise=TRUE, exercise.setup = "pre_penguin"}
+
+```
+
+```{r summary_penguins-solution}
+summary(penguins)
+```
+
+```{r summary_penguins-code-check}
+grade_code()
+```
+
+## Answering questions with data
+
+Now that we have a sense of what's in the data set, some questions may come to mind.  For instance, I wonder if the individual species are segregated on specific islands?  Or, are the species are distributed across multiple islands?  Let's try to find out!
+
+Before we start writing R code, let's take a moment and try to think -- conceptually -- about what an answer to this question would look like, so we know here we are headed with our analysis.  In other words, without thinking about R for a moment, try to imagine the characteristics of a data table that would answer the question "*Which species are on which islands?*"
+
+```{r island_quiz}
+quiz(
+  question(
+    "What combination of columns would need to be in a table if that table were to tell us which species are on which islands?",
+    answer("`island` and `number_of_penguins`"),
+    answer("`island` and `species`", correct = TRUE),
+    answer("`species` and `number_of_penguins`"),
+    answer("`number_of_penguins` and `year`")),
+  question(
+    "What would each row in such a table tell you?",
+    answer("The number of penguins on each island"),
+    answer("The number of penguins of each species"),
+    answer("The number of penguins observed each year"),
+    answer("A unique combination of `island` and `species` where penguins exist", correct = TRUE)),
+  question(
+    "What would it mean if the table had 5 rows?",
+    answer("The distrubiton of penguins across islands yields 5 combinations of island and species", correct = TRUE),
+    answer("There are 5 islands where penguins occur"),
+    answer("Peguins were observed over a 5 year period"),
+    answer("There are 5 different species of penguins on each island")))
+```
+
+### Wait. What?
+
+All this talk about "combinations of species and island" may seem wonkish -- and unfamiliar.  But it's simple, really.  Check it out...
+
+If you think about it, the only columns we need in a table that can tells us "*Which islands have which species?*" are `species` and `island.`  If Gentoo penguins are on Dream Island, there should be a record (row) in the table that has "Dream" in the `island` column and "Gentoo" in the `species` column, right?  If the species isn't on Dream Island, the same record would not be in the table. 
+
+If that's still not clear, let's look at an example of such a table. This isn't derived from the `penguins` data -- I just made this up as an example of what we are trying to generate from the data...
+
+```{r}
+tibble::tibble(islands = c("Torgersen", "Biscoe", "Biscoe", "Dream", "Dream"), species = c("Gentoo", "Chinstrap", "Adelie", "Gentoo", "Adelie"))
+```
+
+Each row contains a "unique combination" of islands and species. 
+Therefore, if this table have been derived from the `penguins` data, we would conclude that Torgersen Island has one species (Gentoo), Biscoe Island has two species (Chinstrap and Adelie), and Dream Island has two species (Gentoo and Adelie).  
+
+We could also read it the other way, concluding Gentoo penguins inhabit Torgersen and Dream Islands, Adelie penguins are on Biscoe and Dream Islands, and Chinstraps are limited to Biscoe Island.
+
+Let's make a table like this, but using the actual data in the `penguins` data frame!
+
+<!-- The following code will generate random combinations of `species` and `island` by determining all possible combinations and then selecting a random subset of those combinations.  Play with the code to figure out how it works.  For instance, you might want to insert a line of code to display `all_combos` and then run the code.  Then delete the line that displays `all_combos` and insert a line that displays `n_combos`.  If you look at each intermediate value in the code, you should be able to see how it works!
+
+Once you are done playing, click "start over" and run all the code a few times. The point is see different examples of possible answers to the question "*Which islands have which species?*" so you have an idea of what an answer to that question would look like. 
+
+Remember, each "answer" you get is a *potential* answer, drawn at random from all possible answers.  Once you understand what potential answers look like, you can answer the question by generating a similar table *from the `penguins` data set.*  We'll do that in a moment.  For now, play with this code, see how it works, and then run it a few times to generate some randomized potential answers.
+
+```{r species_island_example, exercise = TRUE, exercise.setup = "pre_penguin"}
+# get all possible combinations of islands and species
+all_combos <- 
+  expand.grid(
+    species = unique(penguins$species),
+    islands = unique(penguins$island))
+# determine how many possible combinations there are
+n_combos <- nrow(all_combos)
+# generate a random number of combinations that will be selected
+n_to_select <- sample(1:n_combos, 1)
+# randomly select `selection_count` row numbers; sort to keep rows in order
+selected_row_numbers <- 
+  sort(
+    sample(1:n_combos, n_to_select))
+# select the corresponding records from 
+all_combos[selected_row_numbers, c(2,1)]
+```  
+-->
+## Who's where?
+
+If at least one Adelie penguin was observed on on Biscoe Island, then there will be *at least one record* in the `penguins` data set that includes the combination "Adelie" for `species` and "Biscoe" for `island`, right?  
+
+If there were _never_ a Chinstrap penguin observed on Dream Island, there would not be any record in the data set with the combination of "Chinstrap" for species and "Dream" for island, right?
+
+So think about this next statement carefully until you really understand *why* it's true...
+
+_All we have to do is: 1) select the `island` and `species` columns from the `penguins` data; and 2) find the unique records across those two columns!_
+
+Make sense?  Hopefully that seems simple enough -- at least in concept.  If you are still a little confused, keep going.  I think it will become clearer.
+
+Remember that when you select a subset of columns from a data.frame, the result in also a data.frame -- just with fewer columns!
+
+Also, you could try to write a function to find the unique records in a data.frame, but this is the type task where you should ask yourself "Is there already a function that does that?"
+
+Use the internet to search for a function that will return the unique records in a data.frame.
+
+What did you find?
+
+```{r distinct_quiz}
+quiz(
+  question(
+    "Which R function will find the unique records a data.frame",
+    answer("distinct()", correct = TRUE),
+    answer("unique()"),
+    answer("singulars()"),
+    answer("unmatched()")),
+   question(
+    "What package is the function contained within?",
+    answer("base"),
+    answer("rlang"),
+    answer("dplyr", correct = TRUE),
+    answer("datatools")))
+```
+
+### Are we there yet?
+
+OK, we've talked about it enough.  Let's do it!
+
+- Use indexing (the `[` operator) to select the `island` and `species` columns from `penguins`.
+- Pass the result to `distinct()`.  Do this second step by nesting the indexed data set within `distinct()`, rather than by storing the indexed data set to a name.
+
+Hint: What package is `distinct()` in again?  Remember, you don't need to load the entire package to use one function.  Use the `::` operator!
+
+```{r distinct_penguin_island, exercise=TRUE, exercise.setup = "pre_penguin"}
+
+```
+
+```{r distinct_penguin_island-solution}
+dplyr::distinct (
+  penguins[ , c("island", "species")]
+)
+```
+
+```{r distinct_penguin_island-code-check}
+grade_code()
+```
+
+What did you find?
+
+```{r distribution_quiz}
+quiz(
+  question(
+    "Which Islands do Chinstrap penguines occur on?",
+    answer("All of the islands"),
+    answer("Dream and Biscoe Islands"),
+    answer("Dream and Torgersen Islands"),
+    answer("Torgersen and Biscoe Islands"),
+    answer("only Dream Island", correct = TRUE),
+    answer("only Biscoe Island"),
+    answer("only Torgersen Island"),
+    answer("None of the Islands")
+  ),
+  question(
+    "Which species occur on Dream Island?",
+    answer("All three species"),
+    answer("Adelie and Gentoo"),
+    answer("Adelie and Chinstrap", correct = TRUE),
+    answer("Chinstrap and Gentoo"),
+    answer("only Adelie"),
+    answer("only Chinstrap"),
+    answer("only Gentoo"),
+    answer("none of the species")
+  )
+)
+```
+
+## Plotting penguins
+
+Let's dust off the `plot()` function and visualize some of the `penguine` data!
+
+I wonder if bill length is related to flipper length?  Bigger penguins are likely to have bigger flippers and bigger bills (I would think...).
+
+Keep in mind:  When we make a plot of "a vs. b", `a` is the dependent variable (on the vertical "y" axis) and `b` is the independent variable (on the horizontal "x" axis)
+
+So use the `plot()` function to graph bill length vs. flipper length for the `penguins` data set.
+
+```{r plot_flipper_bill, exercise=TRUE, exercise.setup = "pre_penguin"}
+ 
+```
+
+```{r plot_flipper_bill-solution}
+plot(penguins$flipper_length_mm, penguins$bill_length_mm)
+```
+
+```{r plot_flipper_bill-code-check}
+grade_code()
+```
+
+Huh.  There's a pattern there fore sure, but a lot of variability.  I wonder if the year in which data were collected could have anything to do with it.  Let's color to points so that each year of data collection is represented by a different color.
+
+To do that, first we have to understand what color names are available in R.  There are a lot.  R has 657 build-in color names!  There are other ways to generate colors too, but we'll start with the built-in names.
+
+Search the internet for a description of the built-in color name in R.
+
+```{r color_quiz} 
+quiz(
+  question(
+    "Which of the following colors is NOT a built in color name in R?",
+    answer("green"),
+    answer("teal", correct = TRUE),
+    answer("thistle"),
+    answer("honeydew"), 
+    answer("firebrick")))
+```
+
+### Using color with `plot()`
+
+To add colors to the result of a call to base R `plot()`, we must make a vector of color names -- one color name for each point on the graph. Since each point on the graph is represented as a row in a data.frame, a simple solution is to add a column of color names to the data.frame.  For instance, consider the `custom_color` column of following data set and the resulting graph:
+
+```{r}
+example_data <- data.frame(x = 1:6, y=1:6, custom_color = c("red", "gold", "blue"))
+example_data
+plot(example_data$x, example_data$y, col = example_data$custom_color, pch = 20, cex = 3)
+```
+
+If we want a different color for each year in the `penguins` data set, then we will have to create a column (let's call it `plot_color` -- the name doesn't matter as long as it's descriptive) and assign each value to `plot_color` based on the value in the `year` column.  
+
+To do this, let's investigate the `year` column.
+
+What's the class of the `year` vector:
+
+```{r, echo = TRUE}
+class(penguins$year)
+```
+
+OK, it's an integer vector.  Assigning colors is easier if we are working with a factor. So let's make the `year` column into a factor.  
+
+Remember, tho, if we want to alter a data set from a package, we have to make a local copy using the `data()` function.  So:
+
+- Call the `data()` function to make a local copy of the `penguins` data set so you can alter it.
+- Convert the `years` column to a factor.
+- Display the levels of the new factor.
+
+```{r create_years_factor, exercise=TRUE, exercise.setup = "pre_penguin"}
+```
+
+```{r create_years_factor-solution}
+data("penguins")
+penguins$year <- factor(penguins$year)
+levels(penguins$year)
+```
+
+```{r create_years_factor-code-check}
+grade_code()
+```
+
+Since a factor assigns an integer value, starting at one, to each unique value in the original vector, the `levels()` of the `penguine$year` factor tells us that, in the `penguins$year` factor, 2007 is 1, 2008 = 2, and 2009 = 3. Check it out:
+
+```{r echo = TRUE}
+data.frame(
+  year = as.character(penguins$year), 
+  factor_value = as.integer(penguins$year)
+)
+```
+
+So if in the factor "2007" is always 1, "2008" is always 2, and "2009" is always 3, then ponder the following code:
+
+```{r, echo=TRUE, eval=FALSE}
+island_colors <- c("red", "gold", "blue")
+island_colors[penguins$year]
+```
+
+```{r island_color_quiz} 
+quiz(
+  question(
+    "What would the second line of code (above) produce?",
+    answer('A vector of 344 color names, with "red" for year 2007, "gold" for year 2008, and "blue" for year 2009', correct = T),
+    answer('A vector of 344 color names, with "red" for year 2009, "gold" for year 2008, and "blue" for year 2007'),
+    answer('A vector of 3 color names, eqivalent to `c(2007 = "red", 2008 = "gold", 2009 = "blue")`'),
+    answer('A vector of 3 color names, eqivalent to `c(2009 = "red", 2008 = "gold", 2007 = "blue")`')))
+```
+
+### Plot by year
+
+OK, so we have a way to make a color vector that can be used for the new colomn in the `penguins` data set.  
+
+- using the `island_colors` vector created above, add a `plot_color` column that has "red" for Biscoe Island, "gold" for Dream Island, and "blue" for Torgersen Island'  
+- remake the prior plot, but passing the parameter `col = penguins$plot_color`
+
+I've included the `island_color` vector for you.  Add your code *below* the provided code.
+```{r plot_flipper_bill_by_year, exercise=TRUE, exercise.setup = "pre_year_colors"}
+# leave the next line first; add code below the next line
+island_colors <- c("red", "gold", "blue")
+
+```
+
+```{r plot_flipper_bill_by_year-solution}
+island_colors <- c("red", "gold", "blue")
+data("penguins")
+penguins$plot_color <- island_colors[penguins$year]
+plot(
+  penguins$flipper_length_mm,
+  penguins$bill_length_mm,
+  col = penguins$plot_color)
+```
+
+```{r plot_flipper_bill_by_year-code-check}
+grade_code()
+```
+
+```{r, echo = TRUE}
+
+```
+
+Hmmmmm...  `Year` doesn't seem to have much to do with the pattern.  All the years seem to overlap quite a bit.
+
+## Integration
+
+Let's do a little more exploration to see what's going on.  There won't be any more solutions to look a, tho.  Everything you'll be asked to do will be based on the skills we've learned and so far in this lab, so if you get stuck, it might help to pop back and look at your prior answers to complete the lab.  You'll be graded on the remainder of the lab.
+
+### Is the `plot_color` vector correct?
+
+First, let's double check that we've got the right colors in the `plot_colors` column right!  Create a summary table that shows there is only one `plot_color` associated with each `year`.
+
+```{r colors_correct, exercise=TRUE, exercise.setup = "pre_year_colors"}
+
+```
+
+```{r colors_correct-solution, exercise.reveal_solution=FALSE}
+dplyr::distinct(penguins[, c("year", "plot_color")])
+```
+
+```{r colors_correct-check}
+grade_this( {
+  pass_if(
+    TRUE,
+    message = "Your solution has been submitted for grading.") })
+```
+
+### Maybe the island makes a difference
+
+- Recreate the `plot_color` column so that red dots represent Biscoe Island, gold dots represent Dream Island, and blue dots represent Torgersen Island.  
+- Create the summary table that shows that each island is associated with only one color.  
+- Then plot bill length vs. flipper length again, but this time with the different colors representing different islands.
+
+```{r plot_flipper_bill_by_island, exercise=TRUE, exercise.setup = "pre_year_colors"}
+
+```
+
+```{r plot_flipper_bill_by_island-solution, exercise.reveal_solution=FALSE}
+penguins$plot_color <- island_colors[penguins$island]
+dplyr::distinct(penguins[, c("island", "plot_color")])
+plot(
+  penguins$flipper_length_mm,
+  penguins$bill_length_mm,
+  col = penguins$plot_color)
+```
+
+```{r plot_flipper_bill_by_island-check}
+grade_this( {
+  pass_if(
+    TRUE,
+    message = "Your solution has been submitted for grading.") })
+```
+
+
+### What about species?
+
+If you've done it correctly, there was some sort of a pattern in the prior graph...  The red dots (Biscoe Island) and the gold dots (Dream Island) segregate out quite a bit, but what's with the weird overlap between all the islands in the lower left part of the graph?
+
+Maybe things shake out a little better if be consider the effect of species?
+
+Let's Repeat the last question, but make the colors represent different species.  
+
+- Recreate the `plot_color` column so that... *Pay attention, now...* Gentoo penguins are "red" dots, Adelies are "gold" dots, and Chinstraps are "blue".  *Got it?*  
+- Create the summary table that shows that each island is associated with only one color.  *Make sure you have the colors right before you make the graph!*
+- Then plot bill length vs. flipper length again, but this time with the different colors representing different islands.
+
+
+
+```{r plot_flipper_bill_by_species, exercise=TRUE, exercise.setup = "pre_year_colors"}
+
+```
+
+```{r plot_flipper_bill_by_species-solution, exercise.reveal_solution=FALSE}
+island_colors <- c("gold", "blue", "red")
+penguins$plot_color <- island_colors[penguins$species]
+dplyr::distinct(penguins[, c("species", "plot_color")])
+plot(
+  penguins$flipper_length_mm,
+  penguins$bill_length_mm,
+  col = penguins$plot_color)
+```
+
+```{r plot_flipper_bill_by_species-check}
+grade_this( {
+  pass_if(
+    TRUE,
+    message = "Your solution has been submitted for grading.") })
+```
+
+```{r interpretation_quiz}
+quiz(
+  question_text(
+    "What do you conclude at the relationship between flipper length and bill length *within* each species?",
+    answer_fn(ENSC311:::submitToTA),
+    rows = 2,
+    correct = "Thanks. The TA will evaluate your answer.  A correct answer would be something like 'Within each species, the bill length is positively correlated with flipper length and the slope of the relationship is similar regardless of species.'"),
+  question_text(
+    "What do you conclude at the relationship between flipper length and bill length when you compare *across* the different species?",
+    answer_fn(ENSC311:::submitToTA),
+    rows = 4,
+    correct = "Thanks. The TA will evaluate your answer.  A correct answer would be something like 'Adelie and Chinstrap penguins have roughly the same range of flipper length, but Chinstraps have overall, longer bills that Adelies.  Gentoos have longer flippers than the other two species, but the range in bill length is similar to Chinstraps.  The ratio of flipper length to bill length is similar for Adelie and Gentoo penguins'"),
+  question_text(
+    "What do you conclude from the fact that `island` seemed to explain some of the variance in the relationship between flipper length bill length?  Does the something about the islands themselves affect this relationship?",
+    answer_fn(ENSC311:::submitToTA),
+    rows = 4,
+    correct = "Thanks. The TA will evaluate your answer.  A correct answer would be something like 'No.  The uneven distribution of spcecies across islands drove the pattern in the graph where color represented island.  Chinstraps are only on Dream Island, and Gentoos are only on Biscoe Island, so species drove a segregation of colors for those islands.  Adelie penguins are on all of the islands, explaining the overlap in island colors in the lower left part of the graph where data were colored by island.'")
+)  
+```
+
+Nice work.  You are done with Lab 4!
