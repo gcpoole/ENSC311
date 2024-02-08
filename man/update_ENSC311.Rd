@@ -4,7 +4,7 @@
 \alias{update_ENSC311}
 \title{Update the ENSC311 package}
 \usage{
-update_ENSC311()
+update_ENSC311(instructor)
 }
 \description{
 Automatically installs the latest version of ENSC311 from github.

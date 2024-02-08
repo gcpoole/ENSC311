@@ -12,10 +12,10 @@ update_ENSC311 <- function(instructor) {
   remotes::install_github("gcpoole/tutorialize")
   remotes::install_github("gcpoole/ENSC311")
   remotes::install_github("gcpoole/SharedTutorials")
-  if(instructor == 1)
+  if(instructor == "Poole")
     remotes::install_github("gcpoole/PooleTutorials")
   else
-    warning("Felton tutorials are not yet incorporated.")
+    remotes::install_github("felt0134/R_Basics")
   cat("\n")
   cat("===== NOTE!!! ===========\n")
   cat("= Be sure all files are saved.  Then, restart R from the Session menu.\n")
@@ -52,8 +52,4 @@ submit_ENSC311 <- function(tutorial_index = NULL) {
   source_name <- file.path(tutorialize::tut_directory(), tut_files[tutorial_index])
   dest_name <- file.path(getwd(), paste0("submit_", tut_files[tutorial_index]))
   file.copy(source_name, dest_name, overwrite = T)
-}
-
-submitToTA = function(x) {
-  learnr::correct()
 }

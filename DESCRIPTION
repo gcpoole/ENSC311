@@ -14,10 +14,9 @@ BugReports: https://github.com/gcpoole/ENSC311/issues
 Suggests: 
     learnr
 Imports: 
-    gradethis (>= 0.2.14),
-    palmerpenguins,
     remotes,
     tutorialize
 Remotes: 
     rstudio/gradethis
+    gcpoole/tutorialize
 RoxygenNote: 7.3.1
