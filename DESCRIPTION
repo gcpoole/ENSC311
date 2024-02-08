@@ -17,6 +17,6 @@ Imports:
     remotes,
     tutorialize
 Remotes: 
-    rstudio/gradethis
+    rstudio/gradethis,
     gcpoole/tutorialize
 RoxygenNote: 7.3.1
