@@ -4,12 +4,24 @@
 #'
 #' Simply run "update_ENSC311()" to get the latest version of the package.
 #' @export
-update_ENSC311 <- function() {
+update_ENSC311 <- function(instructor) {
+  if(!instructor %in% c("Poole","Felton"))
+    stop(
+      "\n`", instructor, "` is not a valid instructor number\n",
+      'Valid instructors are "Poole" or "Felton"')
   remotes::install_github("gcpoole/tutorialize")
   remotes::install_github("gcpoole/ENSC311")
-  cat("Be sure all files are saved and Restart R from the Session menu.\n")
-  cat("You will need to use `library()` to reload any packages including.\n")
-  cat("the ENSC311 pacakge.\n")
+  remotes::install_github("gcpoole/SharedTutorials")
+  if(instructor == 1)
+    remotes::install_github("gcpoole/PooleTutorials")
+  else
+    warning("Felton tutorials are not yet incorporated.")
+  cat("\n")
+  cat("===== NOTE!!! ===========\n")
+  cat("= Be sure all files are saved.  Then, restart R from the Session menu.\n")
+  cat("= You will need to use `library()` to reload packages including\n")
+  cat("= the ENSC311 package.\n")
+  cat("=========================\n")
   invisible(TRUE)
 }
 
