@@ -11,9 +11,9 @@ update_ENSC311 <- function(instructor) {
       'Valid instructors are "Poole" or "Felton"')
   remotes::install_github("gcpoole/tutorialize")
   remotes::install_github("gcpoole/ENSC311")
-  remotes::install_github("gcpoole/SharedTutorials")
+  remotes::install_github("gcpoole/Tutorials311Shared")
   if(instructor == "Poole")
-    remotes::install_github("gcpoole/PooleTutorials")
+    remotes::install_github("gcpoole/Tutorials311Poole")
   else
     remotes::install_github("felt0134/R_Basics")
   cat("\n")
