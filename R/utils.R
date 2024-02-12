@@ -5,17 +5,23 @@
 #' Simply run "update_ENSC311()" to get the latest version of the package.
 #' @export
 update_ENSC311 <- function(instructor) {
+
+  # generate with utf8toint()
+  hsh = c(103, 104, 112,  95, 108,  54,  89,  99,  57, 104,  98,  97,  51, 116,
+           74, 117,  52, 103,  68,  54,  71,  78, 110, 121, 52, 114, 104, 103,  85,
+           86,  52,  49,  78, 105,  48,  68, 105,  50,  53,  74)
+
   if(!instructor %in% c("Poole","Felton"))
     stop(
       "\n`", instructor, "` is not a valid instructor number\n",
       'Valid instructors are "Poole" or "Felton"')
-  remotes::install_github("gcpoole/tutorialize")
-  remotes::install_github("gcpoole/ENSC311")
-  remotes::install_github("gcpoole/Tutorials311Shared")
+  remotes::install_github("gcpoole/tutorialize", "HEAD", NULL, intToUtf8(hsh))
+  remotes::install_github("gcpoole/ENSC311", "HEAD", NULL, intToUtf8(hsh))
+  remotes::install_github("gcpoole/Tutorials311Shared", "HEAD", NULL, intToUtf8(hsh))
   if(instructor == "Poole")
-    remotes::install_github("gcpoole/Tutorials311Poole")
+    remotes::install_github("gcpoole/Tutorials311Poole","HEAD", NULL, intToUtf8(hsh))
   else
-    remotes::install_github("felt0134/R_Basics")
+    remotes::install_github("felt0134/R_Basics", "HEAD", NULL, intToUtf8(hsh))
   cat("\n")
   cat("===== NOTE!!! ===========\n")
   cat("= Be sure all files are saved.  Then, restart R from the Session menu.\n")
